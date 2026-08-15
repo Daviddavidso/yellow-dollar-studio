@@ -9,9 +9,9 @@ export default function Contact() {
 
   const validate = (data) => {
     const e = {}
-    if (!data.name.trim()) e.name = 'Укажите, как к вам обращаться.'
-    if (!data.contact.trim()) e.contact = 'Оставьте Telegram или email для связи.'
-    if (!data.brief.trim()) e.brief = 'Опишите, что нужно сделать.'
+    if (!data.name.trim()) e.name = 'Tell me your name.'
+    if (!data.contact.trim()) e.contact = 'Leave a Telegram or email to reach you.'
+    if (!data.brief.trim()) e.brief = 'Describe what you need.'
     return e
   }
 
@@ -40,31 +40,24 @@ export default function Contact() {
     <section id="contact" className="section section--alt" aria-labelledby={headId}>
       <div className="container cta">
         <Reveal>
-          <p className="eyebrow">Контакты</p>
-          <h2 id={headId} className="h2">Сделаем канал заметным.</h2>
+          <h2 id={headId} className="sr-only">Contact</h2>
           <p className="intro">
-            Расскажите про канал и задачу — отвечу в течение дня с идеей и сроком.
-            Не понравится первый эскиз — переделаю.
+            Tell me about your channel and what you need, and I'll reply within a day
+            with an idea and a price. Don't like the first draft? I'll redo it
           </p>
-          <div className="link-row">
-            <a className="chev big" href="https://t.me/+9MEj4JSWp8FkNDNh" target="_blank" rel="noopener noreferrer">
-              Написать в Telegram <span className="c" aria-hidden="true">›</span>
-              <span className="sr-only">(откроется в новой вкладке)</span>
-            </a>
-          </div>
         </Reveal>
 
         <Reveal delay={0.08}>
           <form className="form" onSubmit={onSubmit} noValidate>
             <div className="field">
-              <label htmlFor="name">Как к вам обращаться <span className="req">*</span></label>
+              <label htmlFor="name">Your name <span className="req">*</span></label>
               <input
                 ref={refs.name}
                 id="name" name="name" type="text" autoComplete="name"
                 required aria-required="true"
                 aria-invalid={errors.name ? 'true' : undefined}
                 aria-describedby={describedBy('name')}
-                placeholder="Например, Алексей"
+                placeholder="e.g. Alex"
               />
               {errors.name && (
                 <p id="name-error" className="field-error" role="alert">
@@ -74,14 +67,14 @@ export default function Contact() {
             </div>
 
             <div className="field">
-              <label htmlFor="contact-field">Telegram или email <span className="req">*</span></label>
+              <label htmlFor="contact-field">Telegram or email <span className="req">*</span></label>
               <input
                 ref={refs.contact}
                 id="contact-field" name="contact" type="text" autoComplete="email"
                 required aria-required="true"
                 aria-invalid={errors.contact ? 'true' : undefined}
                 aria-describedby={describedBy('contact')}
-                placeholder="@username или mail@example.com"
+                placeholder="@username or mail@example.com"
               />
               {errors.contact && (
                 <p id="contact-error" className="field-error" role="alert">
@@ -91,14 +84,14 @@ export default function Contact() {
             </div>
 
             <div className="field">
-              <label htmlFor="brief">Что нужно сделать <span className="req">*</span></label>
+              <label htmlFor="brief">What do you need <span className="req">*</span></label>
               <textarea
                 ref={refs.brief}
                 id="brief" name="brief"
                 required aria-required="true"
                 aria-invalid={errors.brief ? 'true' : undefined}
                 aria-describedby={describedBy('brief')}
-                placeholder="Шапка для YouTube-канала про геймдев, тёмный неон…"
+                placeholder="A thumbnail for a gaming channel, dark neon vibe…"
               />
               {errors.brief && (
                 <p id="brief-error" className="field-error" role="alert">
@@ -107,14 +100,14 @@ export default function Contact() {
               )}
             </div>
 
-            <p className="form-note"><span aria-hidden="true">*</span> — обязательные поля</p>
-            <button type="submit" className="btn">Отправить заявку</button>
+            <p className="form-note"><span aria-hidden="true">*</span> required fields</p>
+            <button type="submit" className="btn">Send request</button>
 
             <p className="form-status" role="status" aria-live="polite">
               {sent && (
                 <>
                   <span aria-hidden="true">✓</span>
-                  Спасибо! Заявка принята — отвечу в течение дня.
+                  Thanks! Got your request — I'll reply within a day.
                 </>
               )}
             </p>

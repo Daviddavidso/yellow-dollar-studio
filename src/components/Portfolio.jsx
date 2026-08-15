@@ -1,5 +1,5 @@
 import { useMemo, useState, useId, useEffect } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import Reveal from './Reveal.jsx'
 
 const NICHES = [
@@ -11,19 +11,29 @@ const NICHES = [
   { key: 'food', label: 'Food Review' },
 ]
 
-const CATEGORIES = [{ key: 'all', label: 'Все' }, ...NICHES]
+const CATEGORIES = [{ key: 'all', label: 'All' }, ...NICHES]
 
-// Real YouTube-thumbnail work; niche assigned round-robin across the 6 categories.
-const THUMB_COUNT = 12
-const WORKS = Array.from({ length: THUMB_COUNT }, (_, i) => {
-  const niche = NICHES[i % NICHES.length]
-  return {
-    id: `thumb-${i + 1}`,
-    cat: niche.key,
-    src: `${import.meta.env.BASE_URL}works/thumbs/thumb-${i + 1}.png`,
-    alt: `YouTube-превью — пример работы №${i + 1} (${niche.label})`,
-  }
-})
+// Real YouTube-thumbnail work — category and alt text match each thumbnail's actual content.
+const BASE = import.meta.env.BASE_URL
+const WORKS = [
+  { n: 1, cat: 'trading', alt: "YouTube thumbnail: 'monetize' — a creator beside a whiteboard graph climbing from 0 to 50K" },
+  { n: 2, cat: 'crypto', alt: "YouTube thumbnail: 'Real Winner' — an AI-app comparison with a young woman" },
+  { n: 3, cat: 'food', alt: 'YouTube thumbnail: a giant purple burger held to camera with a McDonald’s logo' },
+  { n: 4, cat: 'trading', alt: "YouTube thumbnail: 'DAY 14' — a young man holding cash in front of luxury sports cars and a mansion" },
+  { n: 5, cat: 'entertainment', alt: 'YouTube thumbnail: a man in bed with a ghostly figure and a one-star Airbnb review' },
+  { n: 6, cat: 'gaming', alt: 'YouTube thumbnail: a survivor holding a machete on a tropical beach beside a bamboo raft' },
+  { n: 7, cat: 'blogs', alt: 'YouTube thumbnail: a man testing a Chinese survival ration pack at the Great Wall of China' },
+  { n: 8, cat: 'trading', alt: "YouTube thumbnail: 'Every Thursday' — a trader in a suit beside a candlestick chart marked 'Order Block'" },
+  { n: 9, cat: 'crypto', alt: "YouTube thumbnail: 'Master the AI World' — chatbots, automations and workflows with an Anonymous mask" },
+  { n: 10, cat: 'trading', alt: "YouTube thumbnail: 'I stay silent, my results and students speak' — trading dashboards and win rates" },
+  { n: 11, cat: 'trading', alt: 'YouTube thumbnail: income growth from $5K to $20K with a vintage car and a red Ferrari' },
+  { n: 12, cat: 'trading', alt: "YouTube thumbnail: 'Sniper Entry every time' — a trader beside a candlestick chart with marked entries" },
+].map((w) => ({
+  id: `thumb-${w.n}`,
+  cat: w.cat,
+  src: `${BASE}works/thumbs/thumb-${w.n}.png`,
+  alt: w.alt,
+}))
 
 const catLabel = (key) => CATEGORIES.find((c) => c.key === key)?.label ?? ''
 
@@ -47,12 +57,9 @@ export default function Portfolio() {
   return (
     <section id="work" className="section section--alt" aria-labelledby={headId}>
       <div className="container">
-        <Reveal className="work-head">
-          <p className="eyebrow">Работы</p>
-          <h2 id={headId} className="h2">Избранные проекты.</h2>
-        </Reveal>
+        <h2 id={headId} className="sr-only">Selected work</h2>
 
-        <div className="chips" role="group" aria-label="Фильтр работ по категории">
+        <div className="chips" role="group" aria-label="Filter work by category">
           {CATEGORIES.map((c) => (
             <button
               key={c.key}
@@ -67,34 +74,30 @@ export default function Portfolio() {
         </div>
 
         <p className="sr-only" role="status">
-          Показаны работы: {catLabel(active)}. Всего: {items.length}.
+          Showing: {catLabel(active)}. Total: {items.length}.
         </p>
 
-        <motion.div layout={!reduce} className="gallery">
-          <AnimatePresence mode="popLayout">
-            {items.map((w) => (
-              <motion.figure
-                key={w.id}
-                className="work"
-                layout={!reduce}
-                initial={reduce ? false : { opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduce ? undefined : { opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.4, ease: [0.28, 0.11, 0.32, 1] }}
-              >
-                <img
-                  className="work-img"
-                  src={w.src}
-                  alt={w.alt}
-                  width="800"
-                  height="600"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </motion.figure>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <div className="gallery">
+          {items.map((w) => (
+            <motion.figure
+              key={w.id}
+              className="work"
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: [0.28, 0.11, 0.32, 1] }}
+            >
+              <img
+                className="work-img"
+                src={w.src}
+                alt={w.alt}
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.figure>
+          ))}
+        </div>
       </div>
     </section>
   )
