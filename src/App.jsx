@@ -1,15 +1,18 @@
 import { useState } from 'react'
 import Header from './components/Header.jsx'
+import Cases from './components/Cases.jsx'
 import Portfolio from './components/Portfolio.jsx'
+import Pricing from './components/Pricing.jsx'
+import Process from './components/Process.jsx'
+import Faq from './components/Faq.jsx'
 import Contact from './components/Contact.jsx'
 import Reveal from './components/Reveal.jsx'
-
-const TG = 'https://t.me/+9MEj4JSWp8FkNDNh'
+import { BRAND, NAV, TELEGRAM, X_URL, TURNAROUND, REVISIONS, PRICING } from './site.js'
 
 const BASE = import.meta.env.BASE_URL
 const THUMBS = Array.from({ length: 12 }, (_, i) => `${BASE}works/thumbs/thumb-${i + 1}.png`)
 const shift = (n) => [...THUMBS.slice(n), ...THUMBS.slice(0, n)]
-// enough rows to fully cover the hero — no empty black bands
+// enough rows to fully cover the hero — no empty bands
 const ROWS = [
   THUMBS,
   [...THUMBS].reverse(),
@@ -32,8 +35,9 @@ function ReelRow({ srcs, cls }) {
 
 function Hero() {
   const [paused, setPaused] = useState(false)
+  const fromPrice = PRICING[0].price[0]
   return (
-    <section id="top" className="showreel">
+    <section id="top" className="showreel" aria-labelledby="hero-title">
       <div className={`reel${paused ? ' paused' : ''}`} aria-hidden="true">
         {ROWS.map((srcs, i) => (
           <ReelRow key={i} srcs={srcs} cls={`r${(i % 3) + 1}`} />
@@ -43,17 +47,24 @@ function Hero() {
 
       <div className="hero-content">
         <Reveal>
-          <h1>Stop posting<br />dogshit thumbnails</h1>
+          <p className="hero-badge">For finance, crypto &amp; real estate creators</p>
+          <h1 id="hero-title">Stop posting<br />dogshit thumbnails</h1>
           <p className="hero-role">
-            Thumbnails, banners and channel art for YouTubers, streamers
-            and gaming, built to get clicked
+            YouTube thumbnails built to get clicked. Concept first, first draft in 24 hours,
+            final files within 48.
           </p>
           <div className="hero-cta">
             <a className="btn" href="#contact">
               <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              Order design
+              Order a thumbnail
             </a>
+            <a className="btn btn-ghost" href="#cases">See before / after</a>
           </div>
+          <ul className="hero-facts" role="list">
+            <li>Delivered in {TURNAROUND}</li>
+            <li>{REVISIONS} rounds of edits included</li>
+            <li>From {fromPrice} per thumbnail</li>
+          </ul>
         </Reveal>
       </div>
 
@@ -78,20 +89,32 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-center">
-        <a href="#top" className="footer-brand" aria-label="Yellow Dollar Studio — back to top">
+        <a href="#top" className="footer-brand" aria-label={`${BRAND} — back to top`}>
           <img className="brand-mark" src={`${BASE}ydlogo.svg`} alt="" width="44" height="44" />
         </a>
         <p className="footer-tagline">
-          Visuals for YouTube, streamers and gaming.
+          YouTube thumbnails for finance, crypto and real estate creators. Delivered in {TURNAROUND}.
         </p>
         <nav className="footer-nav" aria-label="Footer">
-          <a href="#work">Work</a>
-          <a href="#contact">Order</a>
-          <a href={TG} target="_blank" rel="noopener noreferrer">
-            Telegram<span className="sr-only"> (opens in a new tab)</span>
-          </a>
+          <ul role="list">
+            {NAV.map((n) => (
+              <li key={n.href}><a href={n.href}>{n.label}</a></li>
+            ))}
+            <li>
+              <a href={TELEGRAM} target="_blank" rel="noopener noreferrer">
+                Telegram<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+            {X_URL && (
+              <li>
+                <a href={X_URL} target="_blank" rel="noopener noreferrer">
+                  X<span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            )}
+          </ul>
         </nav>
-        <span className="footer-copy">© 2026 Yellow Dollar Studio</span>
+        <p className="footer-copy">© 2026 {BRAND}</p>
       </div>
     </footer>
   )
@@ -104,7 +127,11 @@ export default function App() {
       <Header />
       <main id="main">
         <Hero />
+        <Cases />
         <Portfolio />
+        <Pricing />
+        <Process />
+        <Faq />
         <Contact />
       </main>
       <Footer />

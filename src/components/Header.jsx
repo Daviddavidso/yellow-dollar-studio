@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { BRAND, NAV, TELEGRAM } from '../site.js'
 
 const NICHES = [
   ['gaming', 'Gaming'],
@@ -10,9 +11,16 @@ const NICHES = [
   ['food', 'Food Review'],
 ]
 
-const TG = 'https://t.me/+9MEj4JSWp8FkNDNh'
 const LOGO = `${import.meta.env.BASE_URL}ydlogo.svg`
 const EASE = [0.32, 0.72, 0, 1]
+
+const ICONS = {
+  '#cases': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" focusable="false"><rect x="3" y="5" width="8" height="14" rx="1.5" /><rect x="13" y="5" width="8" height="14" rx="1.5" /></svg>,
+  '#work': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5" /><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" /><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" /><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" /></svg>,
+  '#pricing': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" /><circle cx="7.5" cy="7.5" r="1.4" /></svg>,
+  '#faq': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" /><path d="M9.6 9.6a2.4 2.4 0 1 1 3.4 2.2c-.7.3-1 .9-1 1.7" /><circle cx="12" cy="17" r="0.5" fill="currentColor" /></svg>,
+  '#contact': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="M4 7.5l8 5.5 8-5.5" /></svg>,
+}
 
 function getTheme() {
   if (typeof document !== 'undefined') return document.documentElement.getAttribute('data-theme') || 'dark'
@@ -72,6 +80,22 @@ export default function Header() {
     pendingFocus.current = null
   }
 
+  // Mobile-menu anchors: the body is scroll-locked while the menu is open, so a native
+  // jump would be undone by the unlock. Close first, then scroll and move focus to the
+  // section heading ourselves (WCAG 2.4.3).
+  const goTo = (e, hash) => {
+    e.preventDefault()
+    setOpen(false)
+    setTimeout(() => {
+      const el = document.querySelector(hash)
+      if (!el) return
+      el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
+      const h = el.querySelector('h1, h2')
+      if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }) }
+      try { history.replaceState(null, '', hash) } catch (err) { /* ignore */ }
+    }, 60)
+  }
+
   const pickCategory = (key) => {
     setOpen(false)
     window.dispatchEvent(new CustomEvent('yd:filter', { detail: key }))
@@ -93,10 +117,18 @@ export default function Header() {
   return (
     <header className="header">
       <div className="container">
-        <a href="#top" className="brand" aria-label="Yellow Dollar Studio — home">
+        <a href="#top" className="brand" aria-label={`${BRAND} — home`}>
           <img className="brand-mark" src={LOGO} alt="" width="36" height="36" />
-          <span className="brand-name">Yellow Dollar Studio</span>
+          <span className="brand-name">{BRAND}</span>
         </a>
+
+        <nav className="nav-desktop" aria-label="Primary">
+          <ul role="list">
+            {NAV.map((n) => (
+              <li key={n.href}><a href={n.href}>{n.label}</a></li>
+            ))}
+          </ul>
+        </nav>
 
         <div className="header-cta">
           <button type="button" className="icon-btn" aria-pressed={isLight} aria-label="Light theme" onClick={toggleTheme}>
@@ -111,7 +143,7 @@ export default function Header() {
               </svg>
             )}
           </button>
-          <a className="btn btn-ghost" href="#contact">
+          <a className="btn" href="#contact">
             <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
             Order
           </a>
@@ -131,10 +163,9 @@ export default function Header() {
 
       <AnimatePresence>
         {open && (
-          <motion.nav
+          <motion.div
             id="mobile-menu"
             className="apple-menu"
-            aria-label="Main menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.3, ease: EASE } }}
@@ -150,14 +181,16 @@ export default function Header() {
                 {/* Panel 1 — main */}
                 <div className="am-panel" inert={view === 'sub' ? '' : undefined}>
                   <motion.div className="am-panel-in" variants={listV} initial="hidden" animate="visible">
-                    <nav className="am-nav" aria-label="Menu">
+                    <nav className="am-nav" aria-label="Main menu">
                       <ul className="am-list">
-                        <motion.li className="am-item" variants={itemV}>
-                          <a className="am-link" href="#work" onClick={() => setOpen(false)}>
-                            <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5" /><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" /><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" /><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" /></svg>
-                            <span>Work</span>
-                          </a>
-                        </motion.li>
+                        {NAV.map((n) => (
+                          <motion.li className="am-item" variants={itemV} key={n.href}>
+                            <a className="am-link" href={n.href} onClick={(e) => goTo(e, n.href)}>
+                              {ICONS[n.href]}
+                              <span>{n.label}</span>
+                            </a>
+                          </motion.li>
+                        ))}
                         <motion.li className="am-item am-disclosure" variants={itemV}>
                           <button ref={drillRef} type="button" className="am-drill" onClick={openSub}>
                             <span className="am-label">
@@ -167,21 +200,15 @@ export default function Header() {
                             <span className="am-chev" aria-hidden="true">›</span>
                           </button>
                         </motion.li>
-                        <motion.li className="am-item" variants={itemV}>
-                          <a className="am-link" href="#contact" onClick={() => setOpen(false)}>
-                            <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="M4 7.5l8 5.5 8-5.5" /></svg>
-                            <span>Contact</span>
-                          </a>
-                        </motion.li>
                       </ul>
                     </nav>
 
                     <motion.div className="am-foot" variants={itemV}>
-                      <a className="btn" href="#contact" onClick={() => setOpen(false)}>
+                      <a className="btn" href="#contact" onClick={(e) => goTo(e, '#contact')}>
                         <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-                        Order design
+                        Order a thumbnail
                       </a>
-                      <a className="am-tg" href={TG} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+                      <a className="am-tg" href={TELEGRAM} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" focusable="false"><path d="M21 4L3 11l6 2.5L21 4zM21 4l-4 16-7-6" /></svg>
                         Telegram
                         <span className="sr-only"> (opens in a new tab)</span>
@@ -189,7 +216,7 @@ export default function Header() {
                       </a>
                       <div className="am-brand">
                         <img src={LOGO} alt="" width="24" height="24" />
-                        <span>Yellow Dollar Studio</span>
+                        <span className="am-name">{BRAND}</span>
                         <span className="am-copy">© 2026</span>
                       </div>
                     </motion.div>
@@ -213,7 +240,7 @@ export default function Header() {
                 </div>
               </motion.div>
             </div>
-          </motion.nav>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>

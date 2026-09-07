@@ -47,7 +47,7 @@ export default function Portfolio() {
     [active],
   )
 
-  // Allow the mobile menu's "Категории" to drive the filter.
+  // Allow the mobile menu's "Categories" to drive the filter.
   useEffect(() => {
     const onFilter = (e) => { if (e.detail) setActive(e.detail) }
     window.addEventListener('yd:filter', onFilter)
@@ -57,7 +57,12 @@ export default function Portfolio() {
   return (
     <section id="work" className="section section--alt" aria-labelledby={headId}>
       <div className="container">
-        <h2 id={headId} className="sr-only">Selected work</h2>
+        <Reveal>
+          <div className="work-head">
+            <h2 id={headId} className="h2">Selected work</h2>
+            <p className="intro">Real thumbnails, filtered by niche.</p>
+          </div>
+        </Reveal>
 
         <div className="chips" role="group" aria-label="Filter work by category">
           {CATEGORIES.map((c) => (
@@ -68,6 +73,9 @@ export default function Portfolio() {
               aria-pressed={active === c.key}
               onClick={() => setActive(c.key)}
             >
+              {active === c.key && (
+                <svg className="chip-check" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" /></svg>
+              )}
               {c.label}
             </button>
           ))}
