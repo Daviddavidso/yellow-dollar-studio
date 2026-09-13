@@ -26,7 +26,7 @@ function Tier({ t, i }) {
         ))}
       </ul>
       {/* only the popular tier keeps a filled yellow CTA */}
-      <a className={`btn ${t.popular ? '' : 'btn-outline'}`} href="#contact">
+      <a className={`btn ${t.popular ? '' : 'btn-ghost'}`} href="#contact">
         Order<span className="sr-only"> the {t.name} plan</span>
       </a>
     </Reveal>

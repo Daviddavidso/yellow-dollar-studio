@@ -22,7 +22,6 @@ export default function Process() {
                 <h3>{s.title}</h3>
               </div>
               <p>{s.text}</p>
-              {i < STEPS.length - 1 && <span className="step-line" aria-hidden="true" />}
             </Reveal>
           ))}
         </ol>

@@ -6,7 +6,9 @@
 
 :root, [data-theme='dark'] {
   --bg: #111111;
-  --header-bg: rgba(17, 17, 17, 0.85);
+  --header-bg: rgba(17, 17, 17, 0.72);
+  --glass: rgba(17, 17, 17, 0.42);
+  --glass-ink: #ffffff;
   --surface: #1c1c1c;
   --surface-2: #242424;
   --alt: #111111;
@@ -29,7 +31,9 @@
 
 [data-theme='light'] {
   --bg: #ffffff;
-  --header-bg: rgba(255, 255, 255, 0.9);
+  --header-bg: rgba(255, 255, 255, 0.78);
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-ink: #111111;
   --surface: #f2f2f2;
   --surface-2: #e9e9e9;
   --alt: #f9f9f9;
@@ -154,16 +158,26 @@ figure { margin: 0; }
 .btn-ghost { background: var(--chip-bg); color: var(--text); }
 .btn-ghost:hover { background: var(--chip-hover); filter: none; }
 /* outline = the border IS the affordance, so it uses --border (≥3:1), never --line */
-.btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-.btn-outline:hover { background: var(--chip-bg); filter: none; }
 
 /* =========================================================
    Header
    ========================================================= */
 .header {
   position: fixed; inset: 0 0 auto 0; height: var(--nav-h); z-index: 100;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
+  background: transparent;
+}
+/* Frosted bar: the thumbnail wall blurs as it scrolls underneath. The blur lives on
+   a pseudo-element, because backdrop-filter on .header itself would make it the
+   containing block for the fixed mobile menu nested inside it. */
+.header::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: var(--header-bg);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+}
+/* no blur support -> opaque page colour, so text never sits on raw imagery */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .header::before { background: var(--bg); }
 }
 .header .container { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
 .brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--text); }
@@ -287,13 +301,13 @@ figure { margin: 0; }
 }
 /* flex-start stops the rows from stretching the tiles into squares */
 .reel-row { display: flex; align-items: flex-start; gap: 12px; width: max-content; will-change: transform; }
-.reel-row.r1 { animation: reel-l 130s linear infinite; }
-.reel-row.r2 { animation: reel-r 165s linear infinite; }
-.reel-row.r3 { animation: reel-l 148s linear infinite; }
+.reel-row.r1 { animation: reel-l 220s linear infinite; }
+.reel-row.r2 { animation: reel-r 280s linear infinite; }
+.reel-row.r3 { animation: reel-l 250s linear infinite; }
 .reel.paused .reel-row { animation-play-state: paused; }
 /* height:auto is required — the HTML height attribute otherwise wins over aspect-ratio */
 .reel-row img {
-  width: clamp(150px, 17vw, 230px); height: auto; aspect-ratio: 16 / 9; object-fit: cover;
+  width: clamp(200px, 28vw, 400px); height: auto; aspect-ratio: 16 / 9; object-fit: cover;
   border-radius: 10px; flex: 0 0 auto; background: var(--surface-2);
 }
 @keyframes reel-l { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -319,23 +333,23 @@ figure { margin: 0; }
 
 /* No border (client spec): the fill inverts with the theme, so it always contrasts
    with the themed hero backdrop it sits on. */
-/* Fully transparent (client spec): no circle, no border, no fill.
-   The glyph is filled in the theme text colour and outlined with a SOLID stroke
-   in the page colour, so its edge always has a measurable contrast partner no
-   matter which thumbnail scrolls behind it. A blurred shadow would not: its
-   alpha falls off, so no pair can be measured. The stroke lives on the <svg>,
-   never on the <button>, so the focus outline stays crisp. */
+/* Glass circle, no border (client spec). The glyph keeps a thin solid stroke in the
+   page colour as a hedge: the contrast margin rests on .reel staying at opacity 0.28,
+   and the stroke is what catches it if that ever changes. */
 .reel-pause {
-  position: absolute; right: 14px; bottom: 14px; z-index: 3;
+  position: absolute; right: 16px; bottom: 16px; z-index: 3;
   width: 46px; height: 46px; border-radius: 50%; padding: 0; border: none;
-  background: transparent; color: var(--text);
+  background: var(--glass); color: var(--glass-ink);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.32);
   cursor: pointer; display: grid; place-items: center;
 }
 .reel-pause svg {
   display: block;
   paint-order: stroke fill;
   stroke: var(--bg);
-  stroke-width: 1.6px;
+  stroke-width: 1.2px;
   stroke-linejoin: round;
   transition: transform 0.18s var(--ease), stroke-width 0.18s var(--ease);
 }
@@ -350,16 +364,18 @@ figure { margin: 0; }
 /* =========================================================
    Before / after comparison sliders
    ========================================================= */
-.cases { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
-.case {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  padding: clamp(20px, 2.6vw, 30px);
-  display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: clamp(20px, 3vw, 40px); align-items: center;
+.cases {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;
 }
-.case-info { display: flex; flex-direction: column; gap: 8px; }
-.case h3 { font-size: clamp(1.15rem, 1.9vw, 1.45rem); font-weight: 700; }
-.case-niche { color: var(--text-2); font-size: 0.88rem; font-weight: 500; }
+.case {
+  background: var(--surface); border-radius: var(--r-lg);
+  padding: clamp(16px, 1.8vw, 22px);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.case-head { display: flex; flex-direction: column; gap: 3px; }
+.case h3 { font-size: clamp(1.05rem, 1.5vw, 1.25rem); font-weight: 700; }
+.case-niche { color: var(--text-2); font-size: 0.85rem; font-weight: 500; }
 
 .compare {
   position: relative; border-radius: var(--r); overflow: hidden;
@@ -419,7 +435,7 @@ figure { margin: 0; }
   }
 }
 
-.metrics { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 10px 0 0; padding: 0; }
+.metrics { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 0; padding: 0; }
 .metrics > div { display: flex; flex-direction: column; gap: 3px; }
 .metrics dt { font-size: 0.8rem; color: var(--text-2); font-weight: 500; }
 .metrics dd { margin: 0; font-family: var(--font-display); font-size: 1.22rem; font-weight: 800; letter-spacing: -0.01em; white-space: nowrap; }
@@ -476,10 +492,11 @@ figure { margin: 0; }
    ========================================================= */
 .tiers { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
 .tier {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  background: var(--surface); border-radius: var(--r-lg);
   padding: 30px 28px; display: flex; flex-direction: column; gap: 10px;
 }
-.tier.popular { border-width: 2px; border-color: var(--border); background: var(--surface-2); padding: 29px 27px; }
+/* "most popular" is carried by the badge text in the heading; the lighter fill is decoration */
+.tier.popular { background: var(--surface-2); }
 .tier h3 { font-size: 1.12rem; font-weight: 700; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .tier-badge {
   display: inline-flex; background: var(--accent); color: var(--accent-ink);
@@ -503,22 +520,17 @@ figure { margin: 0; }
    ========================================================= */
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; position: relative; }
 .step {
-  position: relative; background: var(--surface); border: 1px solid var(--line);
+  position: relative; background: var(--surface);
   border-radius: var(--r-lg); padding: 28px 26px;
-  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  transition: transform 0.2s var(--ease);
 }
-.step:hover { border-color: var(--border); transform: translateY(-3px); }
+.step:hover { transform: translateY(-3px); }
 .step-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .step .nbox {
-  width: 42px; height: 42px; flex: 0 0 auto; border-radius: 50%;
+  width: 2.25em; height: 2.25em; flex: 0 0 auto; border-radius: 50%;
   background: var(--accent); color: var(--accent-ink);
   display: grid; place-items: center;
-  font-family: var(--font-display); font-size: 1.05rem; font-weight: 800;
-}
-/* decorative connector between the three cards */
-.step-line {
-  position: absolute; top: 49px; left: calc(100% + 1px); width: 18px; height: 2px;
-  background: var(--line);
+  font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; line-height: 1;
 }
 .step h3 { font-size: 1.12rem; font-weight: 700; }
 .step p { color: var(--text-2); line-height: 1.55; }
@@ -527,8 +539,8 @@ figure { margin: 0; }
    FAQ
    ========================================================= */
 .faq { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
-.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 0 20px; }
-.faq details[open] { border-color: var(--border); }
+.faq details { background: var(--surface); border-radius: var(--r); padding: 0 20px; }
+.faq details[open] { background: var(--surface-2); }
 .faq summary {
   list-style: none; cursor: pointer;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -587,7 +599,7 @@ figure { margin: 0; }
 /* =========================================================
    Footer
    ========================================================= */
-.footer { background: var(--alt); padding: 52px 0 38px; font-size: 0.95rem; border-top: 1px solid var(--line); }
+.footer { background: var(--alt); padding: 52px 0 38px; font-size: 0.95rem; }
 .footer-center { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
 .footer-brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--text); }
 .footer-brand .brand-name { font-size: 1.15rem; }
@@ -605,10 +617,9 @@ figure { margin: 0; }
   .nav-desktop { display: none; }
   .nav-toggle { display: inline-flex; }
   .tiers, .steps { grid-template-columns: 1fr; }
-  .step-line { display: none; }   /* connector must never cross content */
 }
 @media (max-width: 880px) {
-  .case { grid-template-columns: 1fr; gap: 18px; }
+  .cases { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
   .gallery { grid-template-columns: 1fr; }
@@ -624,6 +635,11 @@ figure { margin: 0; }
   .field input, .field textarea { border: 1px solid; }
   .cmp-divider, .cmp-knob { forced-color-adjust: none; }
   .compare:has(.cmp-range:focus-visible) { outline-color: Highlight; }
+  /* surfaces all collapse to Canvas here, so the cards need a real edge back */
+  .case, .tier, .step, .faq details { border: 1px solid CanvasText; }
+  .header::before { background: Canvas; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .header { border-bottom: 1px solid CanvasText; }
+  .reel-pause { background: ButtonFace; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
