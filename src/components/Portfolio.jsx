@@ -67,7 +67,7 @@ export default function Portfolio() {
   // sr-only span so the accessible name is not a bare "see more" in a button list.
   const moreText = expanded ? 'see less' : 'see more'
   const moreExtra = expanded
-    ? `, show only the first ${STEP} works`
+    ? `, show only the first ${STEP}`
     : `, show all ${items.length}${active === 'all' ? '' : ` ${catLabel(active)}`} works`
 
   return (
@@ -128,6 +128,7 @@ export default function Portfolio() {
             <button
               type="button"
               className={`more-btn${expanded ? ' is-open' : ''}`}
+              aria-expanded={expanded}
               onClick={(e) => {
                 setExpanded((v) => !v)
                 if (expanded) e.currentTarget.scrollIntoView({ block: 'nearest' })
