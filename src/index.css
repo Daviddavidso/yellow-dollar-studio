@@ -316,13 +316,6 @@ figure { margin: 0; }
   line-height: 1.5; max-width: 56ch;
 }
 .hero-cta { margin-top: 26px; display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
-.hero-facts {
-  list-style: none; padding: 0; margin: 24px 0 0;
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px;
-  font-size: 0.92rem; font-weight: 500; color: var(--text);
-}
-.hero-facts li { display: inline-flex; align-items: center; gap: 8px; }
-.hero-facts li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
 /* No border (client spec): the fill inverts with the theme, so it always contrasts
    with the themed hero backdrop it sits on. */
@@ -358,10 +351,15 @@ figure { margin: 0; }
    Before / after comparison sliders
    ========================================================= */
 .cases { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
-.case { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: clamp(18px, 2.6vw, 26px); }
-.case-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-.case h3 { font-size: 1.15rem; font-weight: 700; }
-.case-niche { color: var(--text-2); font-size: 0.9rem; font-weight: 500; }
+.case {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: clamp(20px, 2.6vw, 30px);
+  display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(20px, 3vw, 40px); align-items: center;
+}
+.case-info { display: flex; flex-direction: column; gap: 8px; }
+.case h3 { font-size: clamp(1.15rem, 1.9vw, 1.45rem); font-weight: 700; }
+.case-niche { color: var(--text-2); font-size: 0.88rem; font-weight: 500; }
 
 .compare {
   position: relative; border-radius: var(--r); overflow: hidden;
@@ -403,18 +401,28 @@ figure { margin: 0; }
 }
 .cmp-range::-webkit-slider-thumb { -webkit-appearance: none; width: 48px; height: 100%; }
 .cmp-range::-moz-range-thumb { width: 48px; height: 100%; border: 0; border-radius: 0; }
-/* Focus: ring the frame AND light up the handle (the thumb itself is invisible) */
-.compare:focus-within { outline: 3px solid var(--ring); outline-offset: 3px; }
-.compare:focus-within .cmp-knob,
-.compare:focus-within .cmp-divider {
+/* Focus ring is keyboard-only (:focus-visible), so dragging with a mouse never
+   flashes it. The thumb itself is invisible, so the frame and handle carry it. */
+.compare:has(.cmp-range:focus-visible) { outline: 3px solid var(--ring); outline-offset: 3px; }
+.compare:has(.cmp-range:focus-visible) .cmp-knob,
+.compare:has(.cmp-range:focus-visible) .cmp-divider {
   box-shadow: 0 0 0 3px var(--ring), 0 0 0 5px #ffffff, 0 4px 14px rgba(0, 0, 0, 0.5);
 }
-.cmp-hint { margin-top: 10px; font-size: 0.85rem; color: var(--text-2); }
 
-.metrics { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 16px 0 0; padding: 0; }
+/* Without :has() the rule above never matches and the slider would have no focus
+   indicator at all, so fall back to :focus-within there. */
+@supports not selector(:has(*)) {
+  .compare:focus-within { outline: 3px solid var(--ring); outline-offset: 3px; }
+  .compare:focus-within .cmp-knob,
+  .compare:focus-within .cmp-divider {
+    box-shadow: 0 0 0 3px var(--ring), 0 0 0 5px #ffffff, 0 4px 14px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.metrics { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 10px 0 0; padding: 0; }
 .metrics > div { display: flex; flex-direction: column; gap: 3px; }
 .metrics dt { font-size: 0.8rem; color: var(--text-2); font-weight: 500; }
-.metrics dd { margin: 0; font-family: var(--font-display); font-size: 1.22rem; font-weight: 800; letter-spacing: -0.01em; }
+.metrics dd { margin: 0; font-family: var(--font-display); font-size: 1.22rem; font-weight: 800; letter-spacing: -0.01em; white-space: nowrap; }
 
 /* =========================================================
    Work gallery
@@ -599,14 +607,15 @@ figure { margin: 0; }
   .tiers, .steps { grid-template-columns: 1fr; }
   .step-line { display: none; }   /* connector must never cross content */
 }
+@media (max-width: 880px) {
+  .case { grid-template-columns: 1fr; gap: 18px; }
+}
 @media (max-width: 720px) {
   .gallery { grid-template-columns: 1fr; }
-  .case-head { margin-bottom: 12px; }
 }
 @media (max-width: 560px) {
   .container { padding: 0 16px; }
   .chips { padding: 8px 16px; margin: 0 -16px 22px; }
-  .header-cta .btn { display: none; }
   .hero-cta .btn { width: 100%; }
 }
 
@@ -614,6 +623,7 @@ figure { margin: 0; }
 @media (forced-colors: active) {
   .field input, .field textarea { border: 1px solid; }
   .cmp-divider, .cmp-knob { forced-color-adjust: none; }
+  .compare:has(.cmp-range:focus-visible) { outline-color: Highlight; }
 }
 
 @media (prefers-reduced-motion: reduce) {

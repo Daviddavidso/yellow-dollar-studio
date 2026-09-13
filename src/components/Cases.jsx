@@ -95,14 +95,16 @@ export default function Cases() {
         <ul className="cases" role="list">
           {CASES.map((c, i) => (
             <Reveal as="li" className="case" key={c.id} delay={i * 0.05}>
-              <div className="case-head">
-                <h3>{c.title}</h3>
+              {/* text column first in DOM and on the left, so each heading still
+                  precedes the slider it names in both reading and visual order */}
+              <div className="case-info">
                 <p className="case-niche">{c.niche}</p>
+                <h3>{c.title}</h3>
+                <dl className="metrics">
+                  {c.metrics.map((m) => <Metric key={m.label} m={m} />)}
+                </dl>
               </div>
               <Compare c={c} />
-              <dl className="metrics">
-                {c.metrics.map((m) => <Metric key={m.label} m={m} />)}
-              </dl>
             </Reveal>
           ))}
         </ul>

@@ -7,7 +7,7 @@ import Process from './components/Process.jsx'
 import Faq from './components/Faq.jsx'
 import Contact from './components/Contact.jsx'
 import Reveal from './components/Reveal.jsx'
-import { BRAND, BRAND_FULL, NAV, TELEGRAM, X_URL, TURNAROUND, REVISIONS, PRICING } from './site.js'
+import { BRAND, BRAND_FULL, NAV, TELEGRAM, X_URL, TURNAROUND } from './site.js'
 
 const BASE = import.meta.env.BASE_URL
 const THUMBS = Array.from({ length: 12 }, (_, i) => `${BASE}works/thumbs/thumb-${i + 1}.png`)
@@ -40,7 +40,6 @@ function Hero() {
     () => typeof window !== 'undefined'
       && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
   )
-  const fromPrice = PRICING[0].price[0]
   return (
     <section id="top" className="showreel" aria-labelledby="hero-title">
       <button
@@ -76,11 +75,6 @@ function Hero() {
               Order a thumbnail
             </a>
           </div>
-          <ul className="hero-facts" role="list">
-            <li>Delivered in {TURNAROUND}</li>
-            <li>{REVISIONS} rounds of edits included</li>
-            <li>From {fromPrice} per thumbnail</li>
-          </ul>
         </Reveal>
       </div>
 
