@@ -568,29 +568,31 @@ figure { margin: 0; }
 @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
 .field { display: grid; gap: 6px; }
 .field label { font-size: 0.88rem; font-weight: 600; color: var(--text); }
-/* Underline inputs — no boxes (client spec). --border keeps the 1.4.11 boundary at ≥3:1. */
+/* Filled rounded boxes (client spec, matching their reference). The fill alone is
+   only ~1.2:1 against the page, so the 1px --border is what carries the 1.4.11
+   boundary — an empty field has no text of its own to identify it. */
 .field input, .field textarea {
   font-family: inherit; font-size: 1rem; color: var(--text);
-  background: transparent; border: 0; border-bottom: 1.5px solid var(--border);
-  border-radius: 0; padding: 10px 2px;
-  transition: border-color 0.15s var(--ease);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
-.field input::placeholder, .field textarea::placeholder { color: var(--text); opacity: 1; }
-/* keep a real outline in addition to the thicker underline */
+.field input::placeholder, .field textarea::placeholder { color: var(--text-2); opacity: 1; }
+.field input:hover, .field textarea:hover { background: var(--surface-2); }
 .field input:focus-visible, .field textarea:focus-visible {
   outline: 2px solid var(--ring); outline-offset: 3px;
-  border-bottom-color: var(--ring);
+  border-color: var(--ring);
 }
 /* error wins over focus so the red cue never disappears while typing */
-.field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-bottom-color: var(--error); border-bottom-width: 2px; }
-.field textarea { resize: vertical; min-height: 92px; }
+.field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-color: var(--error); border-width: 2px; padding: 13px 15px; }
+.field textarea { resize: vertical; min-height: 150px; }
 .field-error { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; color: var(--error); font-weight: 500; }
 /* Chrome paints its own autofill background — force ours back */
 .field input:-webkit-autofill,
 .field input:-webkit-autofill:hover,
 .field input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--text);
-  box-shadow: inset 0 0 0 1000px var(--bg);
+  box-shadow: inset 0 0 0 1000px var(--surface);
   caret-color: var(--text);
 }
 .form .btn { width: 100%; margin-top: 4px; }
