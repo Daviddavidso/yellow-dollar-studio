@@ -7,7 +7,7 @@ import Process from './components/Process.jsx'
 import Faq from './components/Faq.jsx'
 import Contact from './components/Contact.jsx'
 import Reveal from './components/Reveal.jsx'
-import { BRAND, BRAND_FULL, NAV, TELEGRAM, X_URL, TURNAROUND } from './site.js'
+import { BRAND_FULL, TELEGRAM, X_URL } from './site.js'
 
 const BASE = import.meta.env.BASE_URL
 const THUMBS = Array.from({ length: 12 }, (_, i) => `${BASE}works/thumbs/thumb-${i + 1}.png`)
@@ -77,42 +77,39 @@ function Hero() {
           </div>
         </Reveal>
       </div>
-
     </section>
   )
 }
 
+const TgIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" focusable="false"><path d="M21 4L3 11l6 2.5L21 4zM21 4l-4 16-7-6" /></svg>
+)
+const XIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.4 8.5L23 22h-6.8l-5.3-7-6.1 7H1.7l7.9-9L0 2h7l4.8 6.4L18.9 2zm-1.2 18h1.9L6.4 3.9H4.4L17.7 20z" /></svg>
+)
+
 function Footer() {
   return (
     <footer className="footer">
-      <div className="container footer-center">
-        <a href="#top" className="footer-brand" aria-label={`${BRAND_FULL} — back to top`}>
-          <img className="brand-mark" src={`${BASE}ydlogo.svg`} alt="" width="34" height="34" />
-          <span className="brand-name">{BRAND}</span>
-        </a>
-        <p className="footer-tagline">
-          YouTube thumbnails for finance, crypto and real estate creators. Delivered in {TURNAROUND}.
-        </p>
-        <nav className="footer-nav" aria-label="Footer">
-          <ul role="list">
-            {NAV.map((n) => (
-              <li key={n.href}><a href={n.href}>{n.label}</a></li>
-            ))}
-            <li>
-              <a href={TELEGRAM} target="_blank" rel="noopener noreferrer">
-                Telegram<span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            </li>
-            {X_URL && (
-              <li>
-                <a href={X_URL} target="_blank" rel="noopener noreferrer">
-                  X<span className="sr-only"> (opens in a new tab)</span>
-                </a>
-              </li>
-            )}
-          </ul>
-        </nav>
-        <p className="footer-copy">© 2026 {BRAND_FULL}</p>
+      <div className="container footer-inner">
+        <div className="footer-top">
+          <a className="footer-pill" href={TELEGRAM} target="_blank" rel="noopener noreferrer">
+            <TgIcon />
+            <span>Message on Telegram</span>
+            <span className="sr-only"> (opens in a new tab)</span>
+            <span className="footer-pill-arrow" aria-hidden="true">›</span>
+          </a>
+          {X_URL && (
+            <a className="footer-pill" href={X_URL} target="_blank" rel="noopener noreferrer">
+              <XIcon />
+              <span>DM on X</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+              <span className="footer-pill-arrow" aria-hidden="true">›</span>
+            </a>
+          )}
+        </div>
+        <hr className="footer-divider" />
+        <p className="footer-copy">© 2026 {BRAND_FULL}. All rights reserved.</p>
       </div>
     </footer>
   )
@@ -125,8 +122,8 @@ export default function App() {
       <Header />
       <main id="main">
         <Hero />
-        <Cases />
         <Portfolio />
+        <Cases />
         <Pricing />
         <Process />
         <Faq />

@@ -85,10 +85,6 @@ export default function Cases() {
         <Reveal>
           <div className="section-head">
             <h2 id={headId} className="h2">Before / after</h2>
-            <p className="intro">
-              Drag the handle to swap the creator's original frame for the thumbnail we made,
-              and see what happened after the swap.
-            </p>
           </div>
         </Reveal>
 

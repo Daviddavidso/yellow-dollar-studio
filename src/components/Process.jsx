@@ -10,7 +10,6 @@ export default function Process() {
         <Reveal>
           <div className="section-head">
             <h2 id={headId} className="h2">How it works</h2>
-            <p className="intro">Three steps, no calls, no surprises.</p>
           </div>
         </Reveal>
         {/* role="list" is required: list-style:none drops list semantics in Safari/VoiceOver */}

@@ -57,19 +57,6 @@ export const CASES = [
       { label: 'Views in a week', value: '+96K' },
     ],
   },
-  {
-    id: 'income',
-    niche: 'Finance',
-    title: 'Income growth story',
-    before: 'works/before/case-3.jpg',
-    after: 'works/thumbs/thumb-11.png',
-    beforeAlt: 'A plain vertical frame of a man in a red jacket on a blurred background, no text',
-    afterAlt: "'Last month $5K → Last 30 days $20K' — the man between a vintage car and a red Ferrari",
-    metrics: [
-      { label: 'CTR', from: '4.1%', to: '9.3%' },
-      { label: 'Views in a week', value: '+210K' },
-    ],
-  },
 ]
 
 // Pricing. PLACEHOLDER ranges — confirm with the client. price = [low, high] in USD.

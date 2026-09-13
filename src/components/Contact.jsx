@@ -1,15 +1,8 @@
 import { useRef, useState, useId } from 'react'
 import Reveal from './Reveal.jsx'
-import { FORM_ENDPOINT, TELEGRAM, X_URL, REPLY_TIME } from '../site.js'
+import { FORM_ENDPOINT, REPLY_TIME } from '../site.js'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
-
-const TgIcon = () => (
-  <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" focusable="false"><path d="M21 4L3 11l6 2.5L21 4zM21 4l-4 16-7-6" /></svg>
-)
-const XIcon = () => (
-  <svg className="btn-ico" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.4 8.5L23 22h-6.8l-5.3-7-6.1 7H1.7l7.9-9L0 2h7l4.8 6.4L18.9 2zm-1.2 18h1.9L6.4 3.9H4.4L17.7 20z" /></svg>
-)
 
 export default function Contact() {
   const headId = useId()
@@ -73,71 +66,62 @@ export default function Contact() {
     <section id="contact" className="section" aria-labelledby={headId}>
       <div className="container cta">
         <Reveal>
-          <h2 id={headId} className="h2">Let's make your next video click</h2>
-          <p className="intro">
-            Tell me about the video and what you need. I reply {REPLY_TIME} with a concept and a price.
-            Don't like the first draft? I redo it.
-          </p>
-          <div className="contact-links">
-            <a className="btn btn-ghost" href={TELEGRAM} target="_blank" rel="noopener noreferrer">
-              <TgIcon />
-              Message on Telegram<span className="sr-only"> (opens in a new tab)</span>
-            </a>
-            {X_URL && (
-              <a className="btn btn-ghost" href={X_URL} target="_blank" rel="noopener noreferrer">
-                <XIcon />
-                DM on X<span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            )}
+          <div className="section-head">
+            <h2 id={headId} className="h2">Contact</h2>
           </div>
         </Reveal>
 
-        <Reveal delay={0.08}>
-          <form className="form" onSubmit={onSubmit} noValidate>
-            <div className="field">
-              <label htmlFor="name">Your name</label>
-              <input
-                ref={refs.name}
-                id="name" name="name" type="text" autoComplete="name"
-                required aria-required="true"
-                aria-invalid={errors.name ? 'true' : undefined}
-                aria-describedby={describedBy('name')}
-                placeholder="e.g. Alex"
-              />
-              {errors.name && (
-                <p id="name-error" className="field-error">
-                  <span aria-hidden="true">⚠</span>{errors.name}
-                </p>
-              )}
+        <Reveal delay={0.06}>
+          <form className="form" onSubmit={onSubmit} noValidate aria-labelledby={headId}>
+            {/* Labels are visually hidden to match the reference design; the placeholder
+                is the visible cue, the label is the accessible name (a placeholder alone
+                disappears the moment you type). */}
+            <div className="form-row">
+              <div className="field">
+                <label className="sr-only" htmlFor="name">Your Name</label>
+                <input
+                  ref={refs.name}
+                  id="name" name="name" type="text" autoComplete="name"
+                  required aria-required="true"
+                  aria-invalid={errors.name ? 'true' : undefined}
+                  aria-describedby={describedBy('name')}
+                  placeholder="Your Name"
+                />
+                {errors.name && (
+                  <p id="name-error" className="field-error">
+                    <span aria-hidden="true">⚠</span>{errors.name}
+                  </p>
+                )}
+              </div>
+
+              <div className="field">
+                <label className="sr-only" htmlFor="email">Your Email</label>
+                <input
+                  ref={refs.email}
+                  id="email" name="email" type="email" autoComplete="email" inputMode="email"
+                  required aria-required="true"
+                  aria-invalid={errors.email ? 'true' : undefined}
+                  aria-describedby={describedBy('email')}
+                  placeholder="Your Email"
+                />
+                {errors.email && (
+                  <p id="email-error" className="field-error">
+                    <span aria-hidden="true">⚠</span>{errors.email}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="field">
-              <label htmlFor="email">Email</label>
-              <input
-                ref={refs.email}
-                id="email" name="email" type="email" autoComplete="email" inputMode="email"
-                required aria-required="true"
-                aria-invalid={errors.email ? 'true' : undefined}
-                aria-describedby={describedBy('email')}
-                placeholder="name@example.com"
-              />
-              {errors.email && (
-                <p id="email-error" className="field-error">
-                  <span aria-hidden="true">⚠</span>{errors.email}
-                </p>
-              )}
-            </div>
-
-            <div className="field">
-              <label htmlFor="message">Message <span className="opt">(optional)</span></label>
+              <label className="sr-only" htmlFor="message">Your Message (optional)</label>
               <textarea
                 id="message" name="message"
-                placeholder="Video title, a link, and what you're going for"
+                placeholder="Your Message (optional)"
               />
             </div>
 
             <button type="submit" className="btn" aria-disabled={status === 'sending' ? 'true' : undefined}>
-              Send request
+              Send
             </button>
 
             <p

@@ -1,6 +1,6 @@
 import { useId } from 'react'
 import Reveal from './Reveal.jsx'
-import { PRICING, REVISIONS, TURNAROUND } from '../site.js'
+import { PRICING } from '../site.js'
 
 // every row is an included feature, so the tick is decorative
 const Check = () => (
@@ -41,10 +41,6 @@ export default function Pricing() {
         <Reveal>
           <div className="section-head">
             <h2 id={headId} className="h2">Pricing</h2>
-            <p className="intro">
-              Open prices, no "get a quote". Every price includes a concept, {REVISIONS} rounds of
-              edits and delivery in {TURNAROUND}.
-            </p>
           </div>
         </Reveal>
         <ul className="tiers" role="list">
