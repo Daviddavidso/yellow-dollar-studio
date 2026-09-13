@@ -63,9 +63,12 @@ export default function Portfolio() {
     return () => window.removeEventListener('yd:filter', onFilter)
   }, [])
 
-  const moreLabel = expanded
-    ? 'Show fewer works'
-    : `Show all ${items.length}${active === 'all' ? '' : ` ${catLabel(active)}`} works`
+  // Visible wording is the client's ("see more"); the qualifier rides along in an
+  // sr-only span so the accessible name is not a bare "see more" in a button list.
+  const moreText = expanded ? 'see less' : 'see more'
+  const moreExtra = expanded
+    ? `, show only the first ${STEP} works`
+    : `, show all ${items.length}${active === 'all' ? '' : ` ${catLabel(active)}`} works`
 
   return (
     <section id="work" className="section section--alt" aria-labelledby={headId}>
@@ -130,8 +133,9 @@ export default function Portfolio() {
                 if (expanded) e.currentTarget.scrollIntoView({ block: 'nearest' })
               }}
             >
-              {moreLabel}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+              <span className="more-text">{moreText}</span>
+              <span className="sr-only">{moreExtra}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
             </button>
           </div>
         )}

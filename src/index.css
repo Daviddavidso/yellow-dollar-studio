@@ -473,16 +473,18 @@ figure { margin: 0; }
 .work:hover { transform: scale(1.045); border-radius: var(--r-lg); z-index: 3; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55); }
 .work-img { display: block; width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; background: var(--surface-2); }
 
-.more-row { display: flex; justify-content: center; margin-top: 26px; }
+.more-row { display: flex; justify-content: center; margin-top: 24px; }
+/* plain line of text, no pill (client spec) — identified by its own label */
 .more-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  min-height: 44px; padding: 0 22px; border-radius: var(--pill);
-  border: none; cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600;
-  color: var(--text); background: var(--chip-bg);
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 44px; padding: 0 10px;
+  border: none; background: transparent; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  color: var(--text);
   scroll-margin-top: calc(var(--nav-h) + 16px);
-  transition: background 0.18s var(--ease);
 }
-.more-btn:hover { background: var(--chip-hover); }
+.more-btn .more-text { text-underline-offset: 4px; }
+.more-btn:hover .more-text { text-decoration: underline; }
 .more-btn svg { transition: transform 0.2s var(--ease); }
 .more-btn.is-open svg { transform: rotate(180deg); }
 
