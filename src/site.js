@@ -3,11 +3,14 @@
 // PLACEHOLDER = demo data that must be replaced with the client's real numbers.
 // ---------------------------------------------------------------------------
 
-export const BRAND = 'Yellow Dollar Studio'
+// Wordmark, written as one word (client spec, YouTube-style lockup).
+export const BRAND = 'YellowDollar'
+export const BRAND_FULL = 'YellowDollar Studio'
 
-// Direct contact links. X is hidden until a handle is set (e.g. 'https://x.com/handle').
+// Direct contact links.
 export const TELEGRAM = 'https://t.me/+9MEj4JSWp8FkNDNh'
-export const X_URL = ''
+// PLACEHOLDER — replace with the real handle, e.g. 'https://x.com/<handle>'.
+export const X_URL = 'https://x.com/yellowdollar'
 
 // Form endpoint. Leave empty to run the form in demo mode (validates, shows the
 // success message, sends nothing). To go live use e.g. Formspree:
@@ -19,11 +22,10 @@ export const REPLY_TIME = 'within 24 hours'
 export const REVISIONS = 2
 
 export const NAV = [
-  { href: '#cases', label: 'Before / After' },
   { href: '#work', label: 'Work' },
   { href: '#pricing', label: 'Pricing' },
   { href: '#faq', label: 'FAQ' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#contact', label: 'Contacts' },
 ]
 
 // Before / After cases. PLACEHOLDER: "before" frames are cut from the same

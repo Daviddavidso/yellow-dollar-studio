@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import Reveal from './Reveal.jsx'
 import { CASES } from '../site.js'
 
@@ -19,6 +19,63 @@ function Metric({ m }) {
   )
 }
 
+/*
+  Before/after comparison slider.
+  The control is a real <input type="range"> stretched over the frame: it gives us
+  keyboard (arrows/Home/End), touch, and click-to-jump — the last one is the
+  non-dragging alternative required by WCAG 2.5.7, so the input must never get
+  pointer-events: none. clip-path is visual only, so BOTH images stay in the
+  accessibility tree with their own alt text.
+*/
+function Compare({ c }) {
+  const [pos, setPos] = useState(50)
+  const id = useId()
+
+  return (
+    <div className="compare" style={{ '--pos': `${pos}%` }}>
+      <figure className="cmp-layer">
+        <img
+          src={BASE + c.after}
+          alt={`After — ${c.afterAlt}`}
+          width="1280" height="720" loading="lazy" decoding="async"
+        />
+        <figcaption className="cmp-tag cmp-tag-after">After</figcaption>
+      </figure>
+
+      <figure className="cmp-layer cmp-clip">
+        <img
+          src={BASE + c.before}
+          alt={`Before — ${c.beforeAlt}`}
+          width="1280" height="720" loading="lazy" decoding="async"
+        />
+        <figcaption className="cmp-tag cmp-tag-before">Before</figcaption>
+      </figure>
+
+      <span className="cmp-divider" aria-hidden="true" />
+      <span className="cmp-knob" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" focusable="false">
+          <path d="M11 8l-4 4 4 4M13 8l4 4-4 4" />
+        </svg>
+      </span>
+
+      <label className="sr-only" htmlFor={id}>
+        Reveal the new thumbnail — {c.title}
+      </label>
+      <input
+        id={id}
+        className="cmp-range"
+        type="range"
+        min="0"
+        max="100"
+        step="1"
+        value={pos}
+        aria-valuetext={`${pos}% after, ${100 - pos}% before`}
+        onChange={(e) => setPos(Number(e.target.value))}
+      />
+    </div>
+  )
+}
+
 export default function Cases() {
   const headId = useId()
   return (
@@ -28,7 +85,8 @@ export default function Cases() {
           <div className="section-head">
             <h2 id={headId} className="h2">Before / after</h2>
             <p className="intro">
-              The creator's original frame next to the thumbnail we made for it, and what happened after the swap.
+              Drag the handle to swap the creator's original frame for the thumbnail we made,
+              and see what happened after the swap.
             </p>
           </div>
         </Reveal>
@@ -40,19 +98,7 @@ export default function Cases() {
                 <h3>{c.title}</h3>
                 <p className="case-niche">{c.niche}</p>
               </div>
-              <div className="pair">
-                <figure className="before">
-                  <img src={BASE + c.before} alt={c.beforeAlt} width="1280" height="720" loading="lazy" decoding="async" />
-                  <figcaption>Before</figcaption>
-                </figure>
-                <div className="pair-arrow" aria-hidden="true">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-                </div>
-                <figure className="after">
-                  <img src={BASE + c.after} alt={c.afterAlt} width="1280" height="720" loading="lazy" decoding="async" />
-                  <figcaption>After</figcaption>
-                </figure>
-              </div>
+              <Compare c={c} />
               <dl className="metrics">
                 {c.metrics.map((m) => <Metric key={m.label} m={m} />)}
               </dl>

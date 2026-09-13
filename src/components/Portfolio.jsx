@@ -12,6 +12,7 @@ const NICHES = [
 ]
 
 const CATEGORIES = [{ key: 'all', label: 'All' }, ...NICHES]
+const STEP = 6 // how many thumbnails show before "show all"
 
 // Real YouTube-thumbnail work — category and alt text match each thumbnail's actual content.
 const BASE = import.meta.env.BASE_URL
@@ -39,6 +40,7 @@ const catLabel = (key) => CATEGORIES.find((c) => c.key === key)?.label ?? ''
 
 export default function Portfolio() {
   const [active, setActive] = useState('all')
+  const [expanded, setExpanded] = useState(false)
   const reduce = useReducedMotion()
   const headId = useId()
 
@@ -47,12 +49,23 @@ export default function Portfolio() {
     [active],
   )
 
+  const shown = expanded ? items : items.slice(0, STEP)
+  // The button only exists while the set is bigger than one page; changing the
+  // filter always collapses, so its label can never go stale.
+  const hasMore = items.length > STEP
+
+  const pick = (key) => { setActive(key); setExpanded(false) }
+
   // Allow the mobile menu's "Categories" to drive the filter.
   useEffect(() => {
-    const onFilter = (e) => { if (e.detail) setActive(e.detail) }
+    const onFilter = (e) => { if (e.detail) pick(e.detail) }
     window.addEventListener('yd:filter', onFilter)
     return () => window.removeEventListener('yd:filter', onFilter)
   }, [])
+
+  const moreLabel = expanded
+    ? 'Show fewer works'
+    : `Show all ${items.length}${active === 'all' ? '' : ` ${catLabel(active)}`} works`
 
   return (
     <section id="work" className="section section--alt" aria-labelledby={headId}>
@@ -60,7 +73,6 @@ export default function Portfolio() {
         <Reveal>
           <div className="work-head">
             <h2 id={headId} className="h2">Selected work</h2>
-            <p className="intro">Real thumbnails, filtered by niche.</p>
           </div>
         </Reveal>
 
@@ -71,7 +83,7 @@ export default function Portfolio() {
               type="button"
               className="chip"
               aria-pressed={active === c.key}
-              onClick={() => setActive(c.key)}
+              onClick={() => pick(c.key)}
             >
               {active === c.key && (
                 <svg className="chip-check" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" /></svg>
@@ -81,12 +93,13 @@ export default function Portfolio() {
           ))}
         </div>
 
+        {/* one live region covers both the filter change and the expand/collapse */}
         <p className="sr-only" role="status">
-          Showing: {catLabel(active)}. Total: {items.length}.
+          Showing: {catLabel(active)}. {shown.length} of {items.length} shown.
         </p>
 
         <div className="gallery">
-          {items.map((w) => (
+          {shown.map((w) => (
             <motion.figure
               key={w.id}
               className="work"
@@ -99,13 +112,29 @@ export default function Portfolio() {
                 src={w.src}
                 alt={w.alt}
                 width="800"
-                height="600"
+                height="450"
                 loading="lazy"
                 decoding="async"
               />
             </motion.figure>
           ))}
         </div>
+
+        {hasMore && (
+          <div className="more-row">
+            <button
+              type="button"
+              className={`more-btn${expanded ? ' is-open' : ''}`}
+              onClick={(e) => {
+                setExpanded((v) => !v)
+                if (expanded) e.currentTarget.scrollIntoView({ block: 'nearest' })
+              }}
+            >
+              {moreLabel}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   )

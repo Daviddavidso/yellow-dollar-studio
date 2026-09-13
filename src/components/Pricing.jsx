@@ -2,17 +2,19 @@ import { useId } from 'react'
 import Reveal from './Reveal.jsx'
 import { PRICING, REVISIONS, TURNAROUND } from '../site.js'
 
+// every row is an included feature, so the tick is decorative
 const Check = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" /></svg>
 )
 
 function Tier({ t, i }) {
-  const id = useId()
   const [lo, hi] = t.price
   return (
     <Reveal as="li" className={`tier${t.popular ? ' popular' : ''}`} delay={i * 0.06}>
-      <h3 id={id}>{t.name}</h3>
-      {t.popular && <p className="badge">Most popular</p>}
+      <h3>
+        {t.name}
+        {t.popular && <span className="tier-badge">Most popular</span>}
+      </h3>
       <p className="price">
         {lo}<span aria-hidden="true">–</span><span className="sr-only"> to </span>{hi}
       </p>
@@ -23,7 +25,10 @@ function Tier({ t, i }) {
           <li key={f}><Check />{f}</li>
         ))}
       </ul>
-      <a className="btn" href="#contact" aria-describedby={id}>Order</a>
+      {/* only the popular tier keeps a filled yellow CTA */}
+      <a className={`btn ${t.popular ? '' : 'btn-outline'}`} href="#contact">
+        Order<span className="sr-only"> the {t.name} plan</span>
+      </a>
     </Reveal>
   )
 }
@@ -31,13 +36,14 @@ function Tier({ t, i }) {
 export default function Pricing() {
   const headId = useId()
   return (
-    <section id="pricing" className="section section--alt" aria-labelledby={headId}>
+    <section id="pricing" className="section" aria-labelledby={headId}>
       <div className="container">
         <Reveal>
           <div className="section-head">
             <h2 id={headId} className="h2">Pricing</h2>
             <p className="intro">
-              Open prices, no "get a quote". Every price includes a concept, {REVISIONS} rounds of edits and delivery in {TURNAROUND}.
+              Open prices, no "get a quote". Every price includes a concept, {REVISIONS} rounds of
+              edits and delivery in {TURNAROUND}.
             </p>
           </div>
         </Reveal>

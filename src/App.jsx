@@ -7,7 +7,7 @@ import Process from './components/Process.jsx'
 import Faq from './components/Faq.jsx'
 import Contact from './components/Contact.jsx'
 import Reveal from './components/Reveal.jsx'
-import { BRAND, NAV, TELEGRAM, X_URL, TURNAROUND, REVISIONS, PRICING } from './site.js'
+import { BRAND, BRAND_FULL, NAV, TELEGRAM, X_URL, TURNAROUND, REVISIONS, PRICING } from './site.js'
 
 const BASE = import.meta.env.BASE_URL
 const THUMBS = Array.from({ length: 12 }, (_, i) => `${BASE}works/thumbs/thumb-${i + 1}.png`)
@@ -47,18 +47,16 @@ function Hero() {
 
       <div className="hero-content">
         <Reveal>
-          <p className="hero-badge">For finance, crypto &amp; real estate creators</p>
           <h1 id="hero-title">Stop posting<br />dogshit thumbnails</h1>
           <p className="hero-role">
-            YouTube thumbnails built to get clicked. Concept first, first draft in 24 hours,
-            final files within 48.
+            Thumbnails for finance, crypto and real estate creators. Concept first,
+            first draft in 24 hours, final files within 48.
           </p>
           <div className="hero-cta">
             <a className="btn" href="#contact">
               <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
               Order a thumbnail
             </a>
-            <a className="btn btn-ghost" href="#cases">See before / after</a>
           </div>
           <ul className="hero-facts" role="list">
             <li>Delivered in {TURNAROUND}</li>
@@ -72,7 +70,7 @@ function Hero() {
         type="button"
         className="reel-pause"
         aria-pressed={paused}
-        aria-label={paused ? 'Play background animation' : 'Pause background animation'}
+        aria-label="Pause background animation"
         onClick={() => setPaused((p) => !p)}
       >
         {paused ? (
@@ -89,8 +87,9 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-center">
-        <a href="#top" className="footer-brand" aria-label={`${BRAND} — back to top`}>
-          <img className="brand-mark" src={`${BASE}ydlogo.svg`} alt="" width="44" height="44" />
+        <a href="#top" className="footer-brand" aria-label={`${BRAND_FULL} — back to top`}>
+          <img className="brand-mark" src={`${BASE}ydlogo.svg`} alt="" width="34" height="34" />
+          <span className="brand-name">{BRAND}</span>
         </a>
         <p className="footer-tagline">
           YouTube thumbnails for finance, crypto and real estate creators. Delivered in {TURNAROUND}.
@@ -114,7 +113,7 @@ function Footer() {
             )}
           </ul>
         </nav>
-        <p className="footer-copy">© 2026 {BRAND}</p>
+        <p className="footer-copy">© 2026 {BRAND_FULL}</p>
       </div>
     </footer>
   )

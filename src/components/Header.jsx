@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { BRAND, NAV, TELEGRAM } from '../site.js'
+import { BRAND, BRAND_FULL, NAV, TELEGRAM } from '../site.js'
 
 const NICHES = [
   ['gaming', 'Gaming'],
@@ -14,8 +14,8 @@ const NICHES = [
 const LOGO = `${import.meta.env.BASE_URL}ydlogo.svg`
 const EASE = [0.32, 0.72, 0, 1]
 
+// one entry per NAV href — a missing key would silently render no icon
 const ICONS = {
-  '#cases': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" focusable="false"><rect x="3" y="5" width="8" height="14" rx="1.5" /><rect x="13" y="5" width="8" height="14" rx="1.5" /></svg>,
   '#work': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5" /><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" /><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" /><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" /></svg>,
   '#pricing': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" /><circle cx="7.5" cy="7.5" r="1.4" /></svg>,
   '#faq': <svg className="am-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" /><path d="M9.6 9.6a2.4 2.4 0 1 1 3.4 2.2c-.7.3-1 .9-1 1.7" /><circle cx="12" cy="17" r="0.5" fill="currentColor" /></svg>,
@@ -117,8 +117,8 @@ export default function Header() {
   return (
     <header className="header">
       <div className="container">
-        <a href="#top" className="brand" aria-label={`${BRAND} — home`}>
-          <img className="brand-mark" src={LOGO} alt="" width="36" height="36" />
+        <a href="#top" className="brand" aria-label={`${BRAND_FULL} — home`}>
+          <img className="brand-mark" src={LOGO} alt="" width="34" height="34" />
           <span className="brand-name">{BRAND}</span>
         </a>
 
@@ -215,7 +215,7 @@ export default function Header() {
                         <span className="am-ext" aria-hidden="true">↗</span>
                       </a>
                       <div className="am-brand">
-                        <img src={LOGO} alt="" width="24" height="24" />
+                        <img src={LOGO} alt="" width="22" height="22" />
                         <span className="am-name">{BRAND}</span>
                         <span className="am-copy">© 2026</span>
                       </div>
