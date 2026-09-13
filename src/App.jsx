@@ -34,10 +34,28 @@ function ReelRow({ srcs, cls }) {
 }
 
 function Hero() {
-  const [paused, setPaused] = useState(false)
+  // The CSS reduced-motion block already freezes the wall, so start in the paused
+  // state there — otherwise the control would advertise motion that is not running.
+  const [paused, setPaused] = useState(
+    () => typeof window !== 'undefined'
+      && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
+  )
   const fromPrice = PRICING[0].price[0]
   return (
     <section id="top" className="showreel" aria-labelledby="hero-title">
+      <button
+        type="button"
+        className="reel-pause"
+        aria-pressed={paused}
+        aria-label="Pause background animation"
+        onClick={() => setPaused((p) => !p)}
+      >
+        {paused ? (
+          <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.6l9.5 5.4L4 13.4z" fill="currentColor" /></svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="2.5" width="3" height="11" rx="1.2" fill="currentColor" /><rect x="9.5" y="2.5" width="3" height="11" rx="1.2" fill="currentColor" /></svg>
+        )}
+      </button>
       <div className={`reel${paused ? ' paused' : ''}`} aria-hidden="true">
         {ROWS.map((srcs, i) => (
           <ReelRow key={i} srcs={srcs} cls={`r${(i % 3) + 1}`} />
@@ -66,19 +84,6 @@ function Hero() {
         </Reveal>
       </div>
 
-      <button
-        type="button"
-        className="reel-pause"
-        aria-pressed={paused}
-        aria-label="Pause background animation"
-        onClick={() => setPaused((p) => !p)}
-      >
-        {paused ? (
-          <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.6l9.5 5.4L4 13.4z" fill="currentColor" /></svg>
-        ) : (
-          <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="2.5" width="3" height="11" rx="1.2" fill="currentColor" /><rect x="9.5" y="2.5" width="3" height="11" rx="1.2" fill="currentColor" /></svg>
-        )}
-      </button>
     </section>
   )
 }

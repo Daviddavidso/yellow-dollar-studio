@@ -326,16 +326,33 @@ figure { margin: 0; }
 
 /* No border (client spec): the fill inverts with the theme, so it always contrasts
    with the themed hero backdrop it sits on. */
+/* Fully transparent (client spec): no circle, no border, no fill.
+   The glyph is filled in the theme text colour and outlined with a SOLID stroke
+   in the page colour, so its edge always has a measurable contrast partner no
+   matter which thumbnail scrolls behind it. A blurred shadow would not: its
+   alpha falls off, so no pair can be measured. The stroke lives on the <svg>,
+   never on the <button>, so the focus outline stays crisp. */
 .reel-pause {
-  position: absolute; right: 18px; bottom: 18px; z-index: 3;
+  position: absolute; right: 14px; bottom: 14px; z-index: 3;
   width: 46px; height: 46px; border-radius: 50%; padding: 0; border: none;
-  background: var(--text); color: var(--bg);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  background: transparent; color: var(--text);
   cursor: pointer; display: grid; place-items: center;
-  transition: transform 0.18s var(--ease), filter 0.18s var(--ease);
 }
-.reel-pause:hover { transform: scale(1.06); filter: brightness(0.92); }
-.reel-pause svg { display: block; }
+.reel-pause svg {
+  display: block;
+  paint-order: stroke fill;
+  stroke: var(--bg);
+  stroke-width: 1.6px;
+  stroke-linejoin: round;
+  transition: transform 0.18s var(--ease), stroke-width 0.18s var(--ease);
+}
+.reel-pause:hover svg, .reel-pause:focus-visible svg { transform: scale(1.12); stroke-width: 2.6px; }
+
+@media (forced-colors: active) {
+  /* shadows and author colours are dropped here, so give the button a real shape back */
+  .reel-pause { border: 1px solid ButtonText; color: ButtonText; }
+  .reel-pause:focus-visible { outline-color: Highlight; }
+}
 
 /* =========================================================
    Before / after comparison sliders
@@ -605,6 +622,7 @@ figure { margin: 0; }
     transition-duration: 0.01ms !important; scroll-behavior: auto !important;
   }
   .work:hover, .step:hover { transform: none; }
-  .btn:hover, .chip:hover, .icon-btn:hover, .nav-desktop a:hover, .reel-pause:hover { transform: none; }
+  .btn:hover, .chip:hover, .icon-btn:hover, .nav-desktop a:hover { transform: none; }
+  .reel-pause:hover svg, .reel-pause:focus-visible svg { transform: none; }
   .reel-row { animation: none !important; }
 }
