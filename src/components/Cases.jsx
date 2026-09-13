@@ -53,8 +53,9 @@ function Compare({ c }) {
 
       <span className="cmp-divider" aria-hidden="true" />
       <span className="cmp-knob" aria-hidden="true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" focusable="false">
-          <path d="M11 8l-4 4 4 4M13 8l4 4-4 4" />
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" focusable="false">
+          <path d="M10.4 7.2 5.6 12l4.8 4.8z" />
+          <path d="M13.6 7.2 18.4 12l-4.8 4.8z" />
         </svg>
       </span>
 
