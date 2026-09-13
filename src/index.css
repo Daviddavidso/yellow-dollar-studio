@@ -16,7 +16,7 @@
   --text: #fbeae0;
   --text-2: #b3aaa4;
   --line: #2a2a2a;
-  --border: #6e6e6e;          /* ≥3:1 on every surface — input underlines, ghost buttons */
+  --border: #6e6e6e;          /* ≥3:1 on every surface — field boxes, ghost buttons */
   --accent: #ffdb00;          /* yellow — FILLS ONLY (never text, never an outline) */
   --accent-ink: #111111;
   --ring: #3ea6ff;
@@ -588,6 +588,7 @@ figure { margin: 0; }
 .field textarea { resize: vertical; min-height: 150px; }
 .field-error { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; color: var(--error); font-weight: 500; }
 /* Chrome paints its own autofill background — force ours back */
+.field input:autofill,
 .field input:-webkit-autofill,
 .field input:-webkit-autofill:hover,
 .field input:-webkit-autofill:focus {
@@ -639,9 +640,9 @@ figure { margin: 0; }
   .hero-cta .btn { width: 100%; }
 }
 
-/* Windows High Contrast: a transparent, underline-only field can vanish */
+/* Windows High Contrast: author colours and surfaces are stripped here, so every
+   element that relied on a fill for its shape needs a real edge back. */
 @media (forced-colors: active) {
-  .field input, .field textarea { border: 1px solid; }
   .cmp-divider, .cmp-knob { forced-color-adjust: none; }
   .compare:has(.cmp-range:focus-visible) { outline-color: Highlight; }
   /* surfaces all collapse to Canvas here, so the cards need a real edge back */
