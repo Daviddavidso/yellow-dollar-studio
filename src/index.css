@@ -16,7 +16,7 @@
   --text: #fbeae0;
   --text-2: #b3aaa4;
   --line: #2a2a2a;
-  --border: #6e6e6e;          /* ≥3:1 on every surface — field boxes, ghost buttons */
+  --border: #6e6e6e;          /* 3.7:1 on --bg, 3.34:1 on --surface — hover/HCM edges, ghost buttons */
   --accent: #ffdb00;          /* yellow — FILLS ONLY (never text, never an outline) */
   --accent-ink: #111111;
   --ring: #3ea6ff;
@@ -75,8 +75,8 @@
 :root {
   --maxw: 1200px;
   --nav-h: 60px;
-  --r: 12px;
-  --r-lg: 16px;
+  --r: 18px;
+  --r-lg: 26px;
   --pill: 999px;
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --font: 'Roboto', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
@@ -306,7 +306,7 @@ figure { margin: 0; }
 /* height:auto is required — the HTML height attribute otherwise wins over aspect-ratio */
 .reel-row img {
   width: clamp(180px, 22vw, 320px); height: auto; aspect-ratio: 16 / 9; object-fit: cover;
-  border-radius: 10px; flex: 0 0 auto; background: var(--surface-2);
+  border-radius: 14px; flex: 0 0 auto; background: var(--surface-2);
 }
 @keyframes reel-l { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes reel-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
@@ -368,7 +368,7 @@ figure { margin: 0; }
 }
 .case {
   background: var(--surface); border-radius: var(--r-lg);
-  padding: clamp(16px, 1.8vw, 22px);
+  padding: clamp(20px, 1.8vw, 24px);
   display: flex; flex-direction: column; gap: 14px;
 }
 .case-head { display: flex; flex-direction: column; gap: 3px; }
@@ -386,7 +386,7 @@ figure { margin: 0; }
 .cmp-clip img { height: 100%; }
 .cmp-tag {
   position: absolute; top: 10px; z-index: 2;
-  padding: 6px 10px; border-radius: 6px;
+  padding: 6px 11px; border-radius: 999px;
   font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
   pointer-events: none;
 }
@@ -454,7 +454,7 @@ figure { margin: 0; }
 .chips::-webkit-scrollbar { display: none; }
 .chip {
   flex: 0 0 auto; font-family: inherit; font-size: 0.875rem; font-weight: 500; line-height: 1;
-  min-height: 34px; padding: 0 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;
+  min-height: 34px; padding: 0 13px; border-radius: 8px; cursor: pointer; white-space: nowrap; /* client: chips keep this shape */
   background: var(--chip-bg); color: var(--text); border: none;
   display: inline-flex; align-items: center; gap: 6px;
   transition: background 0.18s var(--ease), color 0.18s var(--ease), transform 0.18s var(--ease);
@@ -540,7 +540,7 @@ figure { margin: 0; }
    FAQ
    ========================================================= */
 .faq { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
-.faq details { background: var(--surface); border-radius: var(--r); padding: 0 20px; }
+.faq details { background: var(--surface); border-radius: var(--r); padding: 0 24px; }
 .faq details[open] { background: var(--surface-2); }
 .faq summary {
   list-style: none; cursor: pointer;
@@ -573,19 +573,19 @@ figure { margin: 0; }
    boundary — an empty field has no text of its own to identify it. */
 .field input, .field textarea {
   font-family: inherit; font-size: 1rem; color: var(--text);
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 14px 16px;
+  background: var(--surface-2); border: 1px solid transparent;
+  border-radius: 24px; padding: 14px 18px;
   transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
 .field input::placeholder, .field textarea::placeholder { color: var(--text-2); opacity: 1; }
-.field input:hover, .field textarea:hover { background: var(--surface-2); }
+.field input:hover, .field textarea:hover { border-color: var(--border); }
 .field input:focus-visible, .field textarea:focus-visible {
   outline: 2px solid var(--ring); outline-offset: 3px;
   border-color: var(--ring);
 }
 /* error wins over focus so the red cue never disappears while typing */
-.field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-color: var(--error); border-width: 2px; padding: 13px 15px; }
-.field textarea { resize: vertical; min-height: 150px; }
+.field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-color: var(--error); border-width: 2px; padding: 13px 17px; }
+.field textarea { resize: vertical; min-height: 150px; border-radius: 24px; }
 .field-error { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; color: var(--error); font-weight: 500; }
 /* Chrome paints its own autofill background — force ours back */
 .field input:autofill,
@@ -593,7 +593,7 @@ figure { margin: 0; }
 .field input:-webkit-autofill:hover,
 .field input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--text);
-  box-shadow: inset 0 0 0 1000px var(--surface);
+  box-shadow: inset 0 0 0 1000px var(--surface-2);
   caret-color: var(--text);
 }
 .form .btn { width: 100%; margin-top: 4px; }
@@ -645,8 +645,10 @@ figure { margin: 0; }
 @media (forced-colors: active) {
   .cmp-divider, .cmp-knob { forced-color-adjust: none; }
   .compare:has(.cmp-range:focus-visible) { outline-color: Highlight; }
-  /* surfaces all collapse to Canvas here, so the cards need a real edge back */
+  /* surfaces all collapse to Canvas here, so everything that relied on a fill
+     for its shape needs a real edge back */
   .case, .tier, .step, .faq details { border: 1px solid CanvasText; }
+  .field input, .field textarea { border: 1px solid FieldText; }
   .header::before { background: Canvas; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .header { border-bottom: 1px solid CanvasText; }
   .reel-pause { background: ButtonFace; backdrop-filter: none; -webkit-backdrop-filter: none; }
