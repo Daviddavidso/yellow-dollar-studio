@@ -24,7 +24,6 @@ export const REVISIONS = 2
 export const NAV = [
   { href: '#work', label: 'Work' },
   { href: '#pricing', label: 'Pricing' },
-  { href: '#faq', label: 'FAQ' },
   { href: '#contact', label: 'Contacts' },
 ]
 

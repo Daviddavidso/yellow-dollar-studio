@@ -88,9 +88,6 @@ export default function Portfolio() {
               aria-pressed={active === c.key}
               onClick={() => pick(c.key)}
             >
-              {active === c.key && (
-                <svg className="chip-check" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" /></svg>
-              )}
               {c.label}
             </button>
           ))}
