@@ -48,9 +48,11 @@
   --error: #b3261e;
   --chip-bg: rgba(0, 0, 0, 0.06);
   --chip-hover: rgba(0, 0, 0, 0.12);
-  --scrim-1: rgba(255, 255, 255, 0.82);
-  --scrim-2: rgba(255, 255, 255, 0.7);
-  --scrim-3: rgba(255, 255, 255, 0.4);
+  /* grey-tinted so the hero is a darker band than the page (client spec, light only).
+     200 is as dark as this can go while the subline below still clears 4.5:1. */
+  --scrim-1: rgba(200, 200, 200, 0.82);
+  --scrim-2: rgba(200, 200, 200, 0.7);
+  --scrim-3: rgba(200, 200, 200, 0.45);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
 }
 
@@ -333,6 +335,11 @@ figure { margin: 0; }
   line-height: 1.5; max-width: 56ch;
 }
 .hero-cta { margin-top: 26px; display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
+/* On the grey light-theme band the yellow fill and the backdrop land on the same
+   luminance, so the button loses its shape without an outline. */
+[data-theme='light'] .showreel .btn { border: 1px solid var(--accent-ink); }
+/* #606060 would fall under 4.5:1 on that band at small viewports */
+[data-theme='light'] .hero-role { color: #4a4a4a; }
 
 /* No border (client spec): the fill inverts with the theme, so it always contrasts
    with the themed hero backdrop it sits on. */
@@ -477,13 +484,13 @@ figure { margin: 0; }
 .work:hover { transform: scale(1.045); border-radius: var(--r-lg); z-index: 3; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55); }
 .work-img { display: block; width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; background: var(--surface-2); }
 
-.more-row { display: flex; justify-content: center; margin-top: 24px; }
+.more-row { display: flex; justify-content: center; margin-top: 14px; }
 /* plain line of text, no pill (client spec) — identified by its own label */
 .more-btn {
   display: inline-flex; align-items: center; gap: 7px;
   min-height: 44px; padding: 0 10px;
   border: none; background: transparent; cursor: pointer;
-  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  font-family: inherit; font-size: 1rem; font-weight: 600;
   color: var(--text);
   scroll-margin-top: calc(var(--nav-h) + 16px);
 }
@@ -514,7 +521,6 @@ figure { margin: 0; }
   letter-spacing: -0.02em; line-height: 1.2; margin-top: 6px;
 }
 .price-unit { color: var(--text-2); font-size: 0.9rem; margin-top: -4px; }
-.tier-tagline { color: var(--text-2); }
 .features { list-style: none; margin: 8px 0 14px; padding: 0; display: grid; gap: 10px; }
 .features li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.95rem; }
 .features svg { flex: 0 0 auto; margin-top: 3px; color: var(--text-2); }
@@ -532,7 +538,7 @@ figure { margin: 0; }
 .step:hover { transform: translateY(-3px); }
 .step-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .step .nbox {
-  width: 2.6em; height: 2.6em; flex: 0 0 auto; border-radius: 50%;
+  width: 2em; height: 2em; flex: 0 0 auto; border-radius: 50%;
   background: var(--accent); color: var(--accent-ink);
   display: grid; place-items: center;
   font-family: var(--font-display); font-size: 1.9rem; font-weight: 900; line-height: 1;
@@ -586,9 +592,11 @@ figure { margin: 0; }
   transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
 .field input::placeholder, .field textarea::placeholder { color: var(--text-2); opacity: 1; }
+/* Focus must stay visible (2.4.7) but the client does not want blue here, so the
+   fields use a neutral high-contrast ring instead of the site-wide --ring. */
 .field input:focus-visible, .field textarea:focus-visible {
-  outline: 2px solid var(--ring); outline-offset: 3px;
-  border-color: var(--ring);
+  outline: 2px solid var(--text); outline-offset: 3px;
+  border-color: var(--text);
 }
 /* error wins over focus so the red cue never disappears while typing */
 .field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-color: var(--error); border-width: 2px; padding: 13px 17px; }
@@ -662,6 +670,7 @@ figure { margin: 0; }
   /* the yellow fill is stripped here, so the pressed chip needs a system pair */
   .chip { border: 1px solid ButtonBorder; }
   .chip[aria-pressed='true'] { background: Highlight; color: HighlightText; border-color: Highlight; }
+  .field input:focus-visible, .field textarea:focus-visible { outline-color: Highlight; }
 }
 
 @media (prefers-reduced-motion: reduce) {

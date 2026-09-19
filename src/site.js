@@ -65,7 +65,6 @@ export const PRICING = [
     name: 'Single thumbnail',
     price: ['$35', '$50'],
     unit: 'per thumbnail',
-    tagline: 'One video, one strong concept.',
     features: [
       'Concept before design',
       `${REVISIONS} rounds of edits included`,
@@ -78,7 +77,6 @@ export const PRICING = [
     name: 'Pack of 5',
     price: ['$150', '$200'],
     unit: 'per pack, $30 to $40 each',
-    tagline: 'A consistent look across a series.',
     popular: true,
     features: [
       'Everything in Single',
@@ -92,7 +90,6 @@ export const PRICING = [
     name: 'Monthly',
     price: ['$450', '$700'],
     unit: 'per month, 12 to 16 thumbnails',
-    tagline: 'A designer on call for your channel.',
     features: [
       'Everything in Pack',
       '24-hour turnaround',

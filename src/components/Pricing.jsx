@@ -19,7 +19,6 @@ function Tier({ t, i }) {
         {lo}<span aria-hidden="true">–</span><span className="sr-only"> to </span>{hi}
       </p>
       <p className="price-unit">{t.unit}</p>
-      <p className="tier-tagline">{t.tagline}</p>
       <ul className="features" role="list">
         {t.features.map((f) => (
           <li key={f}><Check />{f}</li>
