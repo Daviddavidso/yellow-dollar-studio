@@ -108,7 +108,6 @@ function Footer() {
             </a>
           )}
         </div>
-        <hr className="footer-divider" />
         <p className="footer-copy">© 2026 {BRAND_FULL}. All rights reserved.</p>
       </div>
     </footer>
