@@ -33,6 +33,9 @@ export default function Contact() {
     setErrors(e)
     if (Object.keys(e).length) {
       const firstKey = ['name', 'email'].find((k) => e[k])
+      // We are moving focus, not the user, so the indicator has to show even if they
+      // submitted by clicking — otherwise there is nothing saying where focus landed.
+      document.documentElement.setAttribute('data-input', 'keyboard')
       refs[firstKey]?.current?.focus()
       setStatus('idle')
       return

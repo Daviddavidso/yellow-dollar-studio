@@ -11,10 +11,14 @@ import './index.css'
   a pointer is covered.
 */
 const root = document.documentElement
-root.setAttribute('data-input', 'keyboard')
+const NAV_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown']
 addEventListener('pointerdown', () => root.setAttribute('data-input', 'pointer'), true)
 addEventListener('keydown', (e) => {
-  if (['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) {
+  // Inside a text control only Tab counts as navigating. Arrows and Home/End there are
+  // just moving the caret — flipping on those would pop the focus edge back in for
+  // someone who clicked into the field and is simply editing.
+  const inText = e.target?.matches?.('textarea, input:not([type=range])')
+  if (e.key === 'Tab' || (!inText && NAV_KEYS.includes(e.key))) {
     root.setAttribute('data-input', 'keyboard')
   }
 }, true)

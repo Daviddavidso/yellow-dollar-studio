@@ -496,16 +496,15 @@ figure { margin: 0; }
 .work-img { display: block; width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; background: var(--surface-2); }
 
 .more-row { display: flex; justify-content: center; margin-top: 4px; }
-/* Nudged right so the WORDS sit on the optical centre, not the text+chevron block.
-   justify-content:center centres the margin box, so a left margin shifts the button by
-   half its value — hence 42px to move the text 21px. */
-.more-btn { margin-left: 42px; }
-/* plain line of text, no pill (client spec) — identified by its own label */
+/* Plain line of text, no pill (client spec) — identified by its own label.
+   margin-left nudges the WORDS onto the optical centre rather than the text+chevron
+   block: justify-content:center centres the margin box, so a left margin shifts the
+   button by half its value — hence 42px to move the text 21px. */
 .more-btn {
   display: inline-flex; align-items: center; gap: 12px;
-  min-height: 52px; padding: 0 12px;
+  min-height: 52px; padding: 0 12px; margin-left: 42px;
   border: none; background: transparent; cursor: pointer;
-  font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 600;
+  font-family: var(--font); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 600;
   letter-spacing: -0.01em; color: var(--text);
   scroll-margin-top: calc(var(--nav-h) + 16px);
 }
@@ -607,27 +606,30 @@ figure { margin: 0; }
   transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
 .field input::placeholder, .field textarea::placeholder { color: var(--text-2); opacity: 1; }
-/* Error edge. Declared BEFORE focus on purpose: both selectors have the same
-   specificity, so whichever comes last wins the border. Focus has to win, otherwise a
-   focused invalid field looks identical to an unfocused one — and Contact.jsx focuses
-   the first invalid field after a failed submit, which is the single most important
-   focus event in the form. The error itself stays conveyed by the ⚠ glyph and the
+/* Error edge. Focus must out-rank this, otherwise a focused invalid field looks
+   identical to an unfocused one — and Contact.jsx focuses the first invalid field
+   after a failed submit, the most important focus event in the form. The focus rule
+   below wins on specificity. The error itself stays conveyed by the ⚠ glyph and the
    message text, never by colour alone. */
 .field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-color: var(--error); border-width: 2px; padding: 13px 17px; }
-/* No ring (client spec, three passes). Focus is the field's own edge going grey and
-   thickening — no halo, no offset. The transparent outline is invisible in normal
-   rendering, but forced-colors repaints outline-color to a system colour, so Windows
-   High Contrast users still get a real ring instead of an edge that matches the
-   resting one. Background is deliberately NOT changed: --surface to --surface-2 is
-   1.1:1, invisible, and it would cost the border 0.3 of its own contrast. */
+/* No ring (client spec, four passes). A click must change nothing at all; focus from
+   the keyboard shows the field's own edge going grey and thickening. The transparent
+   outline stays unscoped: forced-colors repaints outline-color to a system colour, so
+   Windows High Contrast users get a real ring however focus arrived. Background is
+   deliberately NOT changed: --surface to --surface-2 is 1.1:1, invisible, and it would
+   cost the border 0.3 of its own contrast. */
 .field input:focus-visible, .field textarea:focus-visible {
   /* invisible in normal rendering; forced-colors repaints outline-color, so High
      Contrast users get a real ring regardless of how they got here */
   outline: 2px solid transparent; outline-offset: 2px;
 }
-/* the visible edge appears only when focus arrived from the keyboard */
-[data-input='keyboard'] .field input:focus-visible,
-[data-input='keyboard'] .field textarea:focus-visible {
+/* The visible edge is the default and JS can only remove it: main.jsx sets
+   data-input="pointer" on the first pointerdown. Written as :not(pointer) so a broken
+   or slow bundle leaves keyboard users with an indicator rather than none. Higher
+   specificity than the [aria-invalid] rule below, so a focused invalid field still
+   shows focus. */
+html:not([data-input='pointer']) .field input:focus-visible,
+html:not([data-input='pointer']) .field textarea:focus-visible {
   border-color: var(--border); border-width: 2px; padding: 13px 17px;
 }
 .field textarea { resize: none; min-height: 168px; border-radius: 24px; }
