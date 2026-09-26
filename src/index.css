@@ -653,16 +653,17 @@ html:not([data-input='pointer']) .field textarea:focus-visible {
    ========================================================= */
 .footer { background: var(--alt); padding: 12px 0 34px; font-size: 0.95rem; }
 .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 30px; }
-.footer-top { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-.footer-pill {
-  display: inline-flex; align-items: center; gap: 10px;
-  min-height: 44px; padding: 0 16px; border-radius: var(--pill);
+/* square icon buttons like the client's reference; no divider between them, since
+   every hairline on the site was removed at their request */
+.footer-social { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; gap: 12px; }
+.footer-social-btn {
+  display: grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 14px;
   background: var(--surface); color: var(--text); text-decoration: none;
-  font-size: 0.92rem; font-weight: 600;
   transition: background 0.18s var(--ease), transform 0.18s var(--ease);
 }
-.footer-pill:hover { background: var(--hover); transform: translateY(-2px); }
-.footer-pill-arrow { color: var(--text-2); font-size: 1.15rem; line-height: 1; margin-left: 2px; }
+.footer-social-btn svg { width: 20px; height: 20px; }
+.footer-social-btn:hover { background: var(--hover); transform: translateY(-2px); }
 .footer-copy { color: var(--text-2); font-size: 0.82rem; margin: 0; text-align: center; }
 
 /* =========================================================
@@ -713,7 +714,7 @@ html:not([data-input='pointer']) .field textarea:focus-visible {
     transition-duration: 0.01ms !important; scroll-behavior: auto !important;
   }
   .work:hover, .step:hover { transform: none; }
-  .btn:hover, .chip:hover, .icon-btn:hover, .nav-desktop a:hover, .footer-pill:hover { transform: none; }
+  .btn:hover, .chip:hover, .icon-btn:hover, .nav-desktop a:hover, .footer-social-btn:hover { transform: none; }
   .reel-pause:hover svg, .reel-pause:focus-visible svg { transform: none; }
   .reel-row { animation: none !important; }
 }

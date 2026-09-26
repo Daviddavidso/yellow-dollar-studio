@@ -92,22 +92,24 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <div className="footer-top">
-          <a className="footer-pill" href={TELEGRAM} target="_blank" rel="noopener noreferrer">
-            <TgIcon />
-            <span>Message on Telegram</span>
-            <span className="sr-only"> (opens in a new tab)</span>
-            <span className="footer-pill-arrow" aria-hidden="true">›</span>
-          </a>
-          {X_URL && (
-            <a className="footer-pill" href={X_URL} target="_blank" rel="noopener noreferrer">
-              <XIcon />
-              <span>DM on X</span>
-              <span className="sr-only"> (opens in a new tab)</span>
-              <span className="footer-pill-arrow" aria-hidden="true">›</span>
+        {/* square icon buttons, matching the client's reference footer. Icon-only, so
+            each link is named by its sr-only text. */}
+        <ul className="footer-social" role="list">
+          <li>
+            <a className="footer-social-btn" href={TELEGRAM} target="_blank" rel="noopener noreferrer">
+              <TgIcon />
+              <span className="sr-only">Message on Telegram (opens in a new tab)</span>
             </a>
+          </li>
+          {X_URL && (
+            <li>
+              <a className="footer-social-btn" href={X_URL} target="_blank" rel="noopener noreferrer">
+                <XIcon />
+                <span className="sr-only">DM on X (opens in a new tab)</span>
+              </a>
+            </li>
           )}
-        </div>
+        </ul>
         <p className="footer-copy">© 2026 {BRAND_FULL}. All rights reserved.</p>
       </div>
     </footer>
