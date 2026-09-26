@@ -36,7 +36,7 @@
   --glass-ink: #111111;
   --surface: #f2f2f2;
   --surface-2: #e9e9e9;
-  --alt: #f9f9f9;
+  --alt: #ffffff;        /* same as --bg: alternating sections must not show a seam */
   --hover: #e5e5e5;
   --text: #111111;
   --text-2: #606060;
@@ -496,12 +496,16 @@ figure { margin: 0; }
 .work-img { display: block; width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; background: var(--surface-2); }
 
 .more-row { display: flex; justify-content: center; margin-top: 4px; }
+/* Nudged right so the WORDS sit on the optical centre, not the text+chevron block.
+   justify-content:center centres the margin box, so a left margin shifts the button by
+   half its value — hence 42px to move the text 21px. */
+.more-btn { margin-left: 42px; }
 /* plain line of text, no pill (client spec) — identified by its own label */
 .more-btn {
   display: inline-flex; align-items: center; gap: 12px;
   min-height: 52px; padding: 0 12px;
   border: none; background: transparent; cursor: pointer;
-  font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 800;
+  font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 600;
   letter-spacing: -0.01em; color: var(--text);
   scroll-margin-top: calc(var(--nav-h) + 16px);
 }
@@ -617,7 +621,13 @@ figure { margin: 0; }
    resting one. Background is deliberately NOT changed: --surface to --surface-2 is
    1.1:1, invisible, and it would cost the border 0.3 of its own contrast. */
 .field input:focus-visible, .field textarea:focus-visible {
+  /* invisible in normal rendering; forced-colors repaints outline-color, so High
+     Contrast users get a real ring regardless of how they got here */
   outline: 2px solid transparent; outline-offset: 2px;
+}
+/* the visible edge appears only when focus arrived from the keyboard */
+[data-input='keyboard'] .field input:focus-visible,
+[data-input='keyboard'] .field textarea:focus-visible {
   border-color: var(--border); border-width: 2px; padding: 13px 17px;
 }
 .field textarea { resize: none; min-height: 168px; border-radius: 24px; }
