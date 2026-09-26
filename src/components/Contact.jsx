@@ -13,8 +13,8 @@ export default function Contact() {
 
   const validate = (d) => {
     const e = {}
-    if (!d.name.trim()) e.name = 'Tell me your name.'
-    if (!d.email.trim()) e.email = 'Leave an email so I can reply.'
+    if (!d.name.trim()) e.name = 'Tell us your name.'
+    if (!d.email.trim()) e.email = 'Leave an email so we can reply.'
     else if (!EMAIL_RE.test(d.email.trim())) e.email = 'Enter an email like name@example.com.'
     return e
   }
@@ -138,10 +138,10 @@ export default function Contact() {
               {status === 'sent' && (
                 <>
                   <span aria-hidden="true">✓</span>
-                  Thanks! Got your request. I'll reply {REPLY_TIME}.
+                  Thanks! Got your request. We'll reply {REPLY_TIME}.
                 </>
               )}
-              {status === 'error' && "Couldn't send the form. Message me on Telegram instead."}
+              {status === 'error' && "Couldn't send the form. Message us on Telegram instead."}
             </p>
           </form>
         </Reveal>
