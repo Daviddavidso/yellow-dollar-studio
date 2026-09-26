@@ -200,12 +200,12 @@ export default function Header() {
 
                     <motion.div className="am-foot" variants={itemV}>
                       <a className="btn" href="#contact" onClick={(e) => goTo(e, '#contact')}>
-                        <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                        <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14" /></svg>
                         Order a thumbnail
                       </a>
                       <a className="am-tg" href={TELEGRAM} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" focusable="false"><path d="M21 4L3 11l6 2.5L21 4zM21 4l-4 16-7-6" /></svg>
-                        Telegram
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M9.42 15.18l-.4 5.58c.57 0 .82-.24 1.11-.53l2.67-2.55 5.52 4.04c1.01.56 1.72.27 2-.93L23.93 3.82c.32-1.49-.54-2.11-1.52-1.74L1.11 10.15c-1.45.56-1.43 1.37-.25 1.74l5.52 1.72L18.7 5.54c.6-.4 1.15-.18.7.22z" /></svg>
+                        Message on Telegram
                         <span className="sr-only"> (opens in a new tab)</span>
                         <span className="am-ext" aria-hidden="true">↗</span>
                       </a>
