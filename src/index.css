@@ -477,6 +477,15 @@ figure { margin: 0; }
 .chip[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
 
 .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+/* collapsed: the last row trails off into the background — purely visual, the
+   thumbnails stay in the DOM and in the accessibility tree */
+.gallery.is-faded {
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 210px), transparent 100%);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 210px), transparent 100%);
+}
+@media (forced-colors: active) {
+  .gallery.is-faded { -webkit-mask-image: none; mask-image: none; }
+}
 .work {
   margin: 0; position: relative; overflow: hidden; border-radius: var(--r); background: var(--surface);
   transform-origin: center; will-change: transform;
@@ -485,14 +494,14 @@ figure { margin: 0; }
 .work:hover { transform: scale(1.045); border-radius: var(--r-lg); z-index: 3; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55); }
 .work-img { display: block; width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; background: var(--surface-2); }
 
-.more-row { display: flex; justify-content: center; margin-top: 14px; }
+.more-row { display: flex; justify-content: center; margin-top: 4px; }
 /* plain line of text, no pill (client spec) — identified by its own label */
 .more-btn {
-  display: inline-flex; align-items: center; gap: 7px;
-  min-height: 44px; padding: 0 10px;
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 52px; padding: 0 12px;
   border: none; background: transparent; cursor: pointer;
-  font-family: inherit; font-size: 1rem; font-weight: 600;
-  color: var(--text);
+  font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 800;
+  letter-spacing: -0.01em; color: var(--text);
   scroll-margin-top: calc(var(--nav-h) + 16px);
 }
 .more-btn .more-text { text-underline-offset: 4px; }
@@ -539,7 +548,7 @@ figure { margin: 0; }
 .step:hover { transform: translateY(-3px); }
 .step-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .step .nbox {
-  width: 2em; height: 2em; flex: 0 0 auto; border-radius: 50%;
+  width: 1.55em; height: 1.55em; flex: 0 0 auto; border-radius: 50%;
   background: var(--accent); color: var(--accent-ink);
   display: grid; place-items: center;
   font-family: var(--font-display); font-size: 1.9rem; font-weight: 900; line-height: 1;
@@ -593,11 +602,13 @@ figure { margin: 0; }
   transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
 .field input::placeholder, .field textarea::placeholder { color: var(--text-2); opacity: 1; }
-/* Focus must stay visible (2.4.7) but the client does not want blue here, so the
-   fields use a neutral high-contrast ring instead of the site-wide --ring. */
+/* No ring at all here (client rejected blue, then the neutral ring). Focus is still
+   visible: the transparent edge becomes a grey one AND the fill lifts one step, two
+   simultaneous changes on the control itself instead of a halo around it. */
 .field input:focus-visible, .field textarea:focus-visible {
-  outline: 2px solid var(--text); outline-offset: 3px;
-  border-color: var(--text);
+  outline: none;
+  border-color: var(--border);
+  background: var(--surface-2);
 }
 /* error wins over focus so the red cue never disappears while typing */
 .field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-color: var(--error); border-width: 2px; padding: 13px 17px; }

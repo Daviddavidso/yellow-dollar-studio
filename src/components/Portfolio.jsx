@@ -12,7 +12,15 @@ const NICHES = [
 ]
 
 const CATEGORIES = [{ key: 'all', label: 'All' }, ...NICHES]
-const STEP = 6 // how many thumbnails show before "show all"
+// how many thumbnails show before "see more" — three rows at every column count,
+// matching the client's reference (3x3 on desktop)
+const STEPS_BY_COLUMNS = { 3: 9, 2: 6, 1: 4 }
+const columnsNow = () => {
+  if (typeof window === 'undefined' || !window.matchMedia) return 3
+  if (window.matchMedia('(max-width: 720px)').matches) return 1
+  if (window.matchMedia('(max-width: 1080px)').matches) return 2
+  return 3
+}
 
 // Real YouTube-thumbnail work — category and alt text match each thumbnail's actual content.
 const BASE = import.meta.env.BASE_URL
@@ -41,6 +49,15 @@ const catLabel = (key) => CATEGORIES.find((c) => c.key === key)?.label ?? ''
 export default function Portfolio() {
   const [active, setActive] = useState('all')
   const [expanded, setExpanded] = useState(false)
+  const [step, setStep] = useState(() => STEPS_BY_COLUMNS[columnsNow()])
+
+  // the visible count follows the column count so the fade always cuts a whole row
+  useEffect(() => {
+    const sync = () => setStep(STEPS_BY_COLUMNS[columnsNow()])
+    const mqs = ['(max-width: 720px)', '(max-width: 1080px)'].map((q) => window.matchMedia(q))
+    mqs.forEach((m) => m.addEventListener('change', sync))
+    return () => mqs.forEach((m) => m.removeEventListener('change', sync))
+  }, [])
   const reduce = useReducedMotion()
   const headId = useId()
 
@@ -49,10 +66,10 @@ export default function Portfolio() {
     [active],
   )
 
-  const shown = expanded ? items : items.slice(0, STEP)
+  const shown = expanded ? items : items.slice(0, step)
   // The button only exists while the set is bigger than one page; changing the
   // filter always collapses, so its label can never go stale.
-  const hasMore = items.length > STEP
+  const hasMore = items.length > step
 
   const pick = (key) => { setActive(key); setExpanded(false) }
 
@@ -67,7 +84,7 @@ export default function Portfolio() {
   // sr-only span so the accessible name is not a bare "see more" in a button list.
   const moreText = expanded ? 'see less' : 'see more'
   const moreExtra = expanded
-    ? `, show only the first ${STEP}`
+    ? `, show only the first ${step}`
     : `, show all ${items.length}${active === 'all' ? '' : ` ${catLabel(active)}`} works`
 
   return (
@@ -98,7 +115,7 @@ export default function Portfolio() {
           Showing: {catLabel(active)}. {shown.length} of {items.length} shown.
         </p>
 
-        <div className="gallery">
+        <div className={`gallery${hasMore && !expanded ? ' is-faded' : ''}`}>
           {shown.map((w) => (
             <motion.figure
               key={w.id}
@@ -133,7 +150,7 @@ export default function Portfolio() {
             >
               <span className="more-text">{moreText}</span>
               <span className="sr-only">{moreExtra}</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M5 8.5l7 7 7-7" /></svg>
             </button>
           </div>
         )}

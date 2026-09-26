@@ -82,7 +82,7 @@ function Hero() {
 }
 
 const TgIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" focusable="false"><path d="M21 4L3 11l6 2.5L21 4zM21 4l-4 16-7-6" /></svg>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M9.42 15.18l-.4 5.58c.57 0 .82-.24 1.11-.53l2.67-2.55 5.52 4.04c1.01.56 1.72.27 2-.93L23.93 3.82c.32-1.49-.54-2.11-1.52-1.74L1.11 10.15c-1.45.56-1.43 1.37-.25 1.74l5.52 1.72L18.7 5.54c.6-.4 1.15-.18.7.22z" /></svg>
 )
 const XIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.4 8.5L23 22h-6.8l-5.3-7-6.1 7H1.7l7.9-9L0 2h7l4.8 6.4L18.9 2zm-1.2 18h1.9L6.4 3.9H4.4L17.7 20z" /></svg>
