@@ -150,7 +150,7 @@ export default function Portfolio() {
             >
               <span className="more-text">{moreText}</span>
               <span className="sr-only">{moreExtra}</span>
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M5 8.5l7 7 7-7" /></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M5 8.5l7 7 7-7" /></svg>
             </button>
           </div>
         )}

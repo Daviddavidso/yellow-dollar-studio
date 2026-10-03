@@ -501,10 +501,10 @@ figure { margin: 0; }
    block: justify-content:center centres the margin box, so a left margin shifts the
    button by half its value — hence 42px to move the text 21px. */
 .more-btn {
-  display: inline-flex; align-items: center; gap: 12px;
-  min-height: 52px; padding: 0 12px; margin-left: 42px;
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 52px; padding: 0 12px; margin-left: 28px;
   border: none; background: transparent; cursor: pointer;
-  font-family: var(--font); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 600;
+  font-family: var(--font); font-size: 1rem; font-weight: 600;
   letter-spacing: -0.01em; color: var(--text);
   scroll-margin-top: calc(var(--nav-h) + 16px);
 }
@@ -671,6 +671,10 @@ html:not([data-input='pointer']) .field textarea:focus-visible {
    ========================================================= */
 @media (max-width: 1080px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 900px) {
+  /* stacked steps: tighten the vertical rhythm, it reads as dead space on a phone */
+  .steps { gap: 10px; }
+  .step { padding: 18px 20px; }
+  .step-top { margin-bottom: 10px; }
   .nav-desktop { display: none; }
   /* with the nav gone the 1fr/auto/1fr halves would cut the wordmark off against
      the icons (16px of overlap at 430px), so the bar goes back to flex here */
